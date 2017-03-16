@@ -1,0 +1,15 @@
+.badge[data-badge]
+   position relative
+
+   &:after
+      content attr(data-badge)
+      position absolute
+      top -5px
+      right -5px
+      border-radius 50%
+      background #fff
+      color #000
+      font 14px/24px "OpenSans-Bold", sans-serif
+      width 24px
+      height 24px
+      text-align center

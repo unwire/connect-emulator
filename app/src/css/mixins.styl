@@ -1,0 +1,17 @@
+font-face(name)
+    @font-face
+        font-family name
+        font-style normal
+        font-weight 400
+        src local("Open Sans"), local("OpenSans"), url("./fonts/" + name + ".ttf") format("truetype")
+
+clearfix()
+    zoom 1
+
+    &:after
+    &:before
+        content ""
+        display table
+
+    &:after
+        clear both

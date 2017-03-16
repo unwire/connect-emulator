@@ -1,0 +1,56 @@
+.customer-demo
+    .status
+        display block
+        font 20px/20px monospace
+        color lighten(COLOR_BASE, 50%)
+        margin-bottom 10px
+
+    .input
+        display block
+        margin 0
+        font 60px/60px monospace
+        background #fff
+        color #444
+        padding 15px
+        text-align right
+
+        span
+            background #444
+            color #fff
+            border 1px solid red
+
+    .container
+        display table
+        width 100%
+
+        .row
+            display table-row
+
+            .numpad, .information
+                display table-cell
+
+            .numpad
+                width 250px
+
+                button
+                    padding 20px 10px
+                    width (100/3)%
+                    margin 0
+                    box-sizing border-box
+                    height 54px
+
+                    &:active
+                        padding 20px 10px
+
+            .information
+                color #fff
+
+                p
+                    margin 0
+                    padding 10px
+
+                    &:first-child
+                        padding-top 0
+
+                    &:last-child
+                        padding-bottom 0

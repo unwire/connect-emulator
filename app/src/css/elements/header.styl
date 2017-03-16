@@ -1,0 +1,32 @@
+header
+    clearfix()
+    background #D2E9FF
+    padding 10px
+
+    h1
+        color COLOR_BASE
+        font 20px/20px "OpenSans-Light", sans-serif
+        float left
+        padding 8px
+
+    select, button
+        float right
+
+    button
+        width 120px
+        margin-top 2px
+
+    select
+        height auto
+        padding 10px
+        margin-right 10px
+        width 200px
+
+    &.connected button
+        background #eb0000
+
+        &:hover
+            background darken(#eb0000, 10%)
+
+        &:active
+            background darken(#eb0000, 20%)

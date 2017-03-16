@@ -1,0 +1,89 @@
+@import "./vars";
+@import "./mixins";
+
+font-face("OpenSans-Bold")
+font-face("OpenSans-BoldItalic")
+font-face("OpenSans-ExtraBold")
+font-face("OpenSans-ExtraBoldItalic")
+font-face("OpenSans-Italic")
+font-face("OpenSans-Light")
+font-face("OpenSans-LightItalic")
+font-face("OpenSans-Regular")
+font-face("OpenSans-Semibold")
+font-face("OpenSans-SemiboldItalic")
+
+html, body
+    overflow-y visible
+
+body
+    background COLOR_BASE
+    font 14px/16px "OpenSans-Light", sans-serif
+    padding 0
+    margin 0
+
+h1, h2, h3, h4, h5, h6
+    padding 0
+    margin 0
+
+/**
+ * Form element styles
+ **/
+
+input[type="text"], input[type="email"], textarea, select
+    color #888
+    padding 0px 0px 0px 5px
+    border 1px solid #C5E2FF
+    background #FBFBFB
+    outline 0
+    box-shadow inset 0px 1px 6px #ECF3F5
+    font 200 12px/25px "OpenSans-Regular", sans-serif
+    height 30px
+    line-height 15px
+    box-sizing border-box
+
+    &:disabled
+        opacity 0.6
+
+textarea
+    height 100px
+    padding 5px 0px 0px 5px
+
+select
+    background #fbfbfb url("../images/down-arrow.png") no-repeat right
+    appearance none
+    -webkit-appearance none
+    -moz-appearance none
+    text-indent 0.01px
+    text-overflow ""
+
+button
+    padding 10px 30px 10px 30px
+    background #66C1E4
+    border none
+    color #FFF
+    box-shadow 1px 1px 1px #4C6E91
+    text-shadow 1px 1px 1px #5079A3
+    outline 0
+
+    &:disabled
+        opacity 0.6
+
+    &:hover:not(:disabled)
+        background #3EB1DD
+
+    &:active:not(:disabled)
+        background darken(#3EB1DD, 10%)
+        outline 0
+
+
+/**
+ * Elements
+ **/
+@import "./elements/badge";
+@import "./elements/header";
+@import "./elements/tabs";
+
+/**
+ * Emulators
+ **/
+@import "./emulators/customer-demo";

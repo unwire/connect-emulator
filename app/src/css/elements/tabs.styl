@@ -1,0 +1,92 @@
+section.content
+    TAB_BASE_COLOR = lighten(COLOR_BASE, 20%)
+    TAB_BASE_COLOR_INACTIVE = lighten(COLOR_BASE, 5%)
+
+    clearfix()
+    margin 20px
+
+    ul.tabs
+        clearfix()
+        list-style-type none
+        margin 0
+        padding 0
+
+        li
+            border 1px solid TAB_BASE_COLOR_INACTIVE
+            border-bottom none
+            float left
+            margin 0 10px 0 0
+            padding 5px 10px
+            background TAB_BASE_COLOR_INACTIVE
+            font 16px/16px "OpenSans-Regular", sans-serif
+            text-transform uppercase
+
+            &.active
+                background TAB_BASE_COLOR
+                border-color TAB_BASE_COLOR
+
+                &.badge:after
+                    background #fff
+                    color #000
+
+            &.badge:after
+                background lighten(COLOR_BASE, 60%)
+                color COLOR_BASE
+
+            span
+                color #fff
+                display block
+                padding 10px 20px
+
+    section.tabs > div
+        border-top TAB_BASE_COLOR
+        background TAB_BASE_COLOR
+        padding 20px
+
+        &#tab-emulator h1.not-connected
+            color lighten(#fff, 20%)
+
+        &#tab-log ul
+            margin -10px
+            padding 0
+            list-style none
+            background #fff
+
+            li
+                pre
+                    margin 0
+                    padding 10px 10px 0 10px
+
+                &:last-child pre
+                    padding-bottom 10px
+
+                &[class^="log-"] pre:before
+                    display inline-block
+                    opacity 0.4
+                    width 64px
+                    text-align right
+                    padding-right 6px
+
+                &.log-info
+                    color #666
+
+                    pre:before
+                        content "INFO"
+
+                &.log-debug
+                    color #041dd6
+
+                    pre:before
+                        content "DEBUG"
+
+                &.log-error
+                    color #f00004
+
+                    pre:before
+                        content "ERROR"
+
+                &.log-warn
+                    color #ffb300
+
+                    pre:before
+                        content "WARNING"
