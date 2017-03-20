@@ -16,6 +16,12 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
 
         this._el  = this._view.el;
         this._$el = this._view.$el;
+
+        this.terminal.on(Command.connectionEvent, this.onConnectionEvent.bind(this));
+        this.terminal.on(Command.disconnectionEvent, this.onDisconnectionEvent.bind(this));
+        this.terminal.on(Command.connectionInitiated, this.onConnectionInitiated.bind(this));
+        this.terminal.on(Command.receiveEvent, this.onReceiveEvent.bind(this));
+        this.terminal.on(Command.transmitRequest, this.onTransmitRequest.bind(this));
     }
 
     /**
@@ -139,67 +145,32 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
         }
     }
 
-    handle(header, packet) {
-        switch (header.command) {
-            case Command.versionNumber:
-                console.debug("Version:", ((packet[0] << 8) & 0xFF00) + (packet[1] & 0x00FF));
-                this.setColor(0, 0, 1);
-                this.writeState(Command.settings);
-                break;
+    onConnectionEvent(header, packet){
+        this.setColor(1, 1, 0);
+        this._view.status("Device connected...");
+    }
 
-            case Command.settings:
-                if (!this._didGetInitialSettings) {
-                    this._didGetInitialSettings = true;
+    onDisconnectionEvent(header, packet){
+        this.setColor(0, 0, 1);
+        this._view.status("Ready.");
+    }
 
-                    const settings = new Uint8Array(1);
-
-                    settings[0] = packet[0] | 0x20;
-
-                    this.write(Command.settings, 0, settings);
-                } else {
-                    console.debug("Got settings", packet);
-                }
-                break;
-
-            case Command.connectionEvent:
-                this.setColor(1, 1, 0);
-                this._view.status("Device connected...");
-                break;
-
-            case Command.disconnectionEvent:
-                this.setColor(0, 0, 1);
-                this._view.status("Ready.");
-                break;
-
-            case Command.connectionInitiated:
-                if (packet[0] === 0) {
-                    this.setColor(1, 1, 0);
-                this._view.status("Device connecting...");
-                } else {
-                    this.setColor(0, 0, 1);
-                this._view.status("Device disconnecting...");
-                }
-                break;
-
-            case Command.pwmColor:
-                break;
-
-            case Command.receiveEvent:
-                this.handleState(packet);
-                break;
-
-            case Command.transmitRequest:
-                const state = (packet[0] << 8) | packet[1];
-                break;
-
-            default:
-                console.warn("Couldn't handle command:", header.command);
-                break
+    onConnectionInitiated(header, packet){
+        if (packet[0] === 0) {
+            this.setColor(1, 1, 0);
+        this._view.status("Device connecting...");
+        } else {
+            this.setColor(0, 0, 1);
+        this._view.status("Device disconnecting...");
         }
     }
 
-    didConnect() {
-        this.write(Command.versionNumber);
+    onReceiveEvent(header, packet){
+        this.handleState(packet);
     }
 
+    onTransmitRequest(header, packet){
+        this.setColor(1, 1, 0);
+        this._view.status("Device connected...");
+    }
 };

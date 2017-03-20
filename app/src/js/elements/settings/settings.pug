@@ -1,0 +1,46 @@
+.settings
+    .container
+        .row
+            .meta
+              span Version 
+              span(id="version") 0
+        .row.ability
+            .row.magnet
+              label(for="magnet") Magnet 
+              input(id="magnet", type="checkbox", name="magnet")
+            .row.connectable
+              label(for="connectable") Connectable 
+              input(id="connectable", type="checkbox", name="connectable")
+            .row.advertising
+              label(for="advertising") Advertising 
+              input(id="advertising", type="checkbox", name="advertising")
+        .row.mode
+            span Mode 
+            .row
+                input(id="mode0", type="radio", value="0", name="mode")
+                label(for="mode0") primaryId (0)
+            .row            
+                input(id="mode1", type="radio", value="1", name="mode")
+                label(for="mode1") secondaryTerminalId (1)                
+            .row            
+                input(id="mode2", type="radio", value="2", name="mode")
+                label(for="mode2") iBeacon (2)                
+            .row
+                input(id="mode3", type="radio", value="3", name="mode")   
+                label(for="mode3") primaryId + iBeacon (3)
+        .row.security
+            span Blacklist
+            input(id="blacklistOn", type="radio", value="0", name="blacklist")
+            label(for="blacklistOn") On 
+            input(id="blacklistOff", type="radio", value="1", name="blacklist")
+            label(for="blacklistOff") Off 
+        .row.security
+            span RSSI Verification
+            input(id="rssiVerificationOn", type="radio", value="0", name="rssiVerification")
+            label(for="rssiVerificationOn") On 
+            input(id="rssiVerificationOff", type="radio", value="1", name="rssiVerification")
+            label(for="rssiVerificationOff") Off
+        .row.secondaryTerminalId
+            span Secondary terminalId
+            input(type="text", class="secondaryTerminalIdInput")
+            button Set

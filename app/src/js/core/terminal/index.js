@@ -3,6 +3,7 @@ const Command = require("./command");
 const Buffer  = require("./buffer");
 const Header  = require("./header");
 const utils   = require("../utils");
+const Settings = require("../../elements/settings");
 
 class Terminal extends EventEmitter {
 
@@ -13,6 +14,7 @@ class Terminal extends EventEmitter {
         this._buffer = new Buffer();
         this._header = null;
         this._emulator = new emulator(this);
+        this._settings = new Settings(this);
     }
 
     /**
@@ -25,6 +27,10 @@ class Terminal extends EventEmitter {
 
     get emulator() {
         return this._emulator;
+    }
+
+    get settings() {
+        return this._settings;
     }
 
     get path() {
@@ -60,7 +66,7 @@ class Terminal extends EventEmitter {
             const packet = this.buffer.consume(this.currentHeader.expectedLength);
 
             if (packet) {
-                this.emulator.handle(this.currentHeader, packet);
+                this.emit(this.currentHeader.command, this.currentHeader, packet);
                 this._header = null;
             }
         }
@@ -75,7 +81,6 @@ class Terminal extends EventEmitter {
             if (this.connectionInfo) {
                 return resolve(false);
             }
-
             chrome.serial.connect(this.path, {
                 bitrate: 115200,
             }, (connectionInfo) => {
@@ -83,9 +88,10 @@ class Terminal extends EventEmitter {
 
                 if (this.connectionInfo) {
                     chrome.serial.setControlSignals(this.id, { dtr: true, rts: true }, (success) => {
-                        this.emulator.write(Command.settings, "", "");
+                        this.emit("connected", true);
                         resolve(success);
                     });
+
                 } else {
                     reject(chrome.runtime.lastError);
                 }
@@ -113,7 +119,6 @@ class Terminal extends EventEmitter {
             });
         });
     }
-
 }
 
 module.exports = exports = {

@@ -50,25 +50,27 @@ module.exports = exports = class CustomerDemoView extends EventEmitter {
      */
 
     handleKeyPress(event) {
-        if (this._amount) {
-            return;
+        if (event.target.nodeName != "INPUT"){
+            if (this._amount) {
+                return;
+            }
+
+            const code = event.keyCode;
+
+            if (code === 8) {
+                this._input.backspace();
+            } else if (code === 27) {
+                this._input.cancel();
+            } else if (code === 13) {
+                this.commit();
+            } else if (!(code != 43 && code > 31 && (code < 48 || code > 57))) {
+                this._input.number(String.fromCharCode(code));
+            } else if ([110, 188, 190].indexOf(code) !== -1) {
+                this._input.decimal();
+            }
+
+            return false;
         }
-
-        const code = event.keyCode;
-
-        if (code === 8) {
-            this._input.backspace();
-        } else if (code === 27) {
-            this._input.cancel();
-        } else if (code === 13) {
-            this.commit();
-        } else if (!(code != 43 && code > 31 && (code < 48 || code > 57))) {
-            this._input.number(String.fromCharCode(code));
-        } else if ([110, 188, 190].indexOf(code) !== -1) {
-            this._input.decimal();
-        }
-
-        return false;
     }
 
     commit() {
