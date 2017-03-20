@@ -1,6 +1,7 @@
 const $ = require("jquery");
 const serial = require("../../core/serial");
 const template = require("./tabs.pug");
+const Settings = require("../settings")
 
 /**
  * Elements
@@ -9,11 +10,12 @@ const $tabs         = $(template());
 const $itemEmulator = $tabs.find("ul.tabs li[data-tab='#tab-emulator']");
 const $itemLog      = $tabs.find("ul.tabs li[data-tab='#tab-log']");
 const $tabEmulator  = $tabs.find("section.tabs > div#tab-emulator");
+const $tabSettings  = $tabs.find("section.tabs > div#tab-settings");
 const $tabLog       = $tabs.find("section.tabs > div#tab-log");
 const $log          = $tabLog.find("ul.log");
 const $allTabs      = $tabs.find("section.tabs > div");
 const $allItems     = $tabs.find("ul.tabs li");
-const noEmulator    = `<h1 class="not-connected">Choose a device and an emulator &mdash; and press Connect.`;
+const noConnection  = `<h1 class="not-connected">Choose a device and an emulator &mdash; and press Connect.</h1>`;
 
 /**
  * Variables
@@ -41,8 +43,11 @@ serial.on("activeTerminal", (terminal) => {
     if (terminal) {
         $tabEmulator.html("");
         $tabEmulator.append(terminal.emulator.$el);
+        $tabSettings.html("");
+        $tabSettings.append(terminal.settings.$el);
     } else {
-        $tabEmulator.html(noEmulator);
+        $tabEmulator.html(noConnection);
+        $tabSettings.html(noConnection);
     }
 })
 
@@ -96,6 +101,7 @@ window.console = {
 };
 
 $itemEmulator.click();
-$tabEmulator.html(noEmulator);
+$tabEmulator.html(noConnection);
+$tabSettings.html(noConnection);
 
 module.exports = exports = $tabs;

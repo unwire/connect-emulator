@@ -3,6 +3,7 @@ const Command = require("./command");
 const Buffer  = require("./buffer");
 const Header  = require("./header");
 const utils   = require("../utils");
+const Settings = require("../../elements/settings");
 
 class Terminal extends EventEmitter {
 
@@ -13,6 +14,7 @@ class Terminal extends EventEmitter {
         this._buffer = new Buffer();
         this._header = null;
         this._emulator = new emulator(this);
+        this._settings = new Settings(this);
     }
 
     /**
@@ -25,6 +27,10 @@ class Terminal extends EventEmitter {
 
     get emulator() {
         return this._emulator;
+    }
+
+    get settings() {
+        return this._settings;
     }
 
     get path() {
@@ -112,7 +118,6 @@ class Terminal extends EventEmitter {
             });
         });
     }
-
 }
 
 module.exports = exports = {

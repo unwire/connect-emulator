@@ -16,6 +16,7 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
 
         this._el  = this._view.el;
         this._$el = this._view.$el;
+
     }
 
     /**

@@ -1,0 +1,42 @@
+.settings
+    .container
+        .row
+            .magnet
+                label(for="magnet") Magnet 
+                input(id="magnet", type="checkbox", name="magnet")
+            .connectable
+              label(for="Connectable") Connectable 
+              input(id="Connectable", type="checkbox", name="Connectable")
+            .advertising
+              label(for="Advertising") Advertising 
+              input(id="Advertising", type="checkbox", name="Advertising")
+        .row
+            span Mode 
+            label(for="mode0") 0 
+            input(id="mode0", type="radio", value="0", name="mode")
+            label(for="mode1") 1 
+            input(id="mode1", type="radio", value="1", name="mode")
+            label(for="mode2") 2 
+            input(id="mode2", type="radio", value="2", name="mode")
+            label(for="mode3") 3 
+            input(id="mode3", type="radio", value="3", name="mode")              
+        .row
+            span Secondary terminalId
+            input.secondaryTerminalIdInput
+            button Save
+        .row
+            button DFU mode
+            button No Serial
+            button Test Serial
+        .row
+            span Blacklist
+            label(for="blacklistOn") On 
+            input(id="blacklistOn", type="radio", value="0", name="blacklist")
+            label(for="blacklistOff") Off 
+            input(id="blacklistOff", type="radio", value="1", name="blacklist")
+        .row
+            span RSSI Verification
+            label(for="rssiVerificationOn") On 
+            input(id="rssiVerificationOn", type="radio", value="0", name="rssiVerification")
+            label(for="rssiVerificationOff") Off 
+            input(id="rssiVerificationOff", type="radio", value="1", name="rssiVerification")
