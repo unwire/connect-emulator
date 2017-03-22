@@ -155,7 +155,7 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
 
                     settings[0] = packet[0] | 0x20;
 
-                    this.send(Command.settings, 0, settings);
+                    this.write(Command.settings, 0, settings);
                 } else {
                     console.debug("Got settings", packet);
                 }

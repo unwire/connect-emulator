@@ -83,6 +83,7 @@ class Terminal extends EventEmitter {
 
                 if (this.connectionInfo) {
                     chrome.serial.setControlSignals(this.id, { dtr: true, rts: true }, (success) => {
+                        this.emulator.write(Command.settings, "", "");
                         resolve(success);
                     });
                 } else {
