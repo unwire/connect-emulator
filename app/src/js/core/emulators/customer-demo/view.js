@@ -10,7 +10,7 @@ module.exports = exports = class CustomerDemoView extends EventEmitter {
         this._el    = template();
         this._$el   = $(this._el);
         this._input = new Input(this._$el.find(".input"));
-
+        this._auto = false;
         this._amount = false;
 
         $(document).keydown(this.handleKeyPress.bind(this));
@@ -37,6 +37,12 @@ module.exports = exports = class CustomerDemoView extends EventEmitter {
                     break
             }
         });
+
+        this._$el.find("#autoMode").click(function() {
+            self._auto = $(this).is(":checked");
+            self.reset();
+        });
+
     }
 
     /**
@@ -78,8 +84,11 @@ module.exports = exports = class CustomerDemoView extends EventEmitter {
         this._amount = false;
         this._input.cancel();
         this._$el.find(".numpad button").prop("disabled", false);
+        if(this._auto == true){
+            this._input.number(Math.floor((Math.random() * 15) + 190));
+            this.commit();
+        }
     }
-
     status(text) {
         this._$el.find(".status").html(text);
     }
