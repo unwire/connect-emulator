@@ -3,7 +3,7 @@
         .row
             .meta
               span Version 
-              span(id="version") 100
+              span(id="version") 0
         .row
             .magnet
               label(for="magnet") Magnet 
@@ -16,22 +16,14 @@
               input(id="advertising", type="checkbox", name="advertising")
         .row
             span Mode 
-            label(for="mode0") 0 
+            label(for="mode0") primaryId (0)
             input(id="mode0", type="radio", value="0", name="mode")
-            label(for="mode1") 1 
+            label(for="mode1") secondaryTerminalId (1)
             input(id="mode1", type="radio", value="1", name="mode")
-            label(for="mode2") 2 
+            label(for="mode2") iBeacon (2)
             input(id="mode2", type="radio", value="2", name="mode")
-            label(for="mode3") 3 
-            input(id="mode3", type="radio", value="3", name="mode")              
-        .row
-            span Secondary terminalId
-            input(type="text", class="secondaryTerminalIdInput")
-            button Save
-        .row
-            button DFU mode
-            button No Serial
-            button Test Serial
+            label(for="mode3") primaryId + iBeacon (3)
+            input(id="mode3", type="radio", value="3", name="mode")   
         .row
             span Blacklist
             label(for="blacklistOn") On 
@@ -44,3 +36,11 @@
             input(id="rssiVerificationOn", type="radio", value="0", name="rssiVerification")
             label(for="rssiVerificationOff") Off 
             input(id="rssiVerificationOff", type="radio", value="1", name="rssiVerification")
+        .row
+            span Secondary terminalId
+            input(type="text", class="secondaryTerminalIdInput")
+            button Save
+        .row
+            button DFU mode
+            button No Serial
+            button Test Serial
