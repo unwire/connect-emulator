@@ -43,3 +43,13 @@ exports.uint8arr2str = function(arr) {
 
     return result;
 }
+
+exports.toHexString = function(arr) {
+  var result = "";
+
+  for (var i = 0, len = arr.length; i < len; i++) {
+      result += arr[i].toString(16);
+  }
+
+  return result;
+}

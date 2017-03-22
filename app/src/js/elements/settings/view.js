@@ -7,10 +7,10 @@ const template = require("./settings.pug");
 module.exports = exports = class SettingsView extends EventEmitter {
     constructor(terminal) {
         super();
-
         this._el = template();
         this._$el = $(this._el);
     }
+
 
     /**
      * Properties

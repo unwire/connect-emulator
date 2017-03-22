@@ -145,10 +145,11 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
             case Command.versionNumber:
                 console.debug("Version:", ((packet[0] << 8) & 0xFF00) + (packet[1] & 0x00FF));
                 this.setColor(0, 0, 1);
-                this.writeState(Command.settings);
+                this.write(Command.settings);
                 break;
 
             case Command.settings:
+                console.log("Handle settings");
                 if (!this._didGetInitialSettings) {
                     this._didGetInitialSettings = true;
 
@@ -156,7 +157,7 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
 
                     settings[0] = packet[0] | 0x20;
 
-                    this.send(Command.settings, 0, settings);
+                    // this.write(Command.settings, 0, settings);
                 } else {
                     console.debug("Got settings", packet);
                 }

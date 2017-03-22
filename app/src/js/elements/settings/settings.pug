@@ -1,15 +1,19 @@
 .settings
     .container
         .row
+            .meta
+              span Version 
+              span(id="version") 100
+        .row
             .magnet
-                label(for="magnet") Magnet 
-                input(id="magnet", type="checkbox", name="magnet")
+              label(for="magnet") Magnet 
+              input(id="magnet", type="checkbox", name="magnet")
             .connectable
-              label(for="Connectable") Connectable 
-              input(id="Connectable", type="checkbox", name="Connectable")
+              label(for="connectable") Connectable 
+              input(id="connectable", type="checkbox", name="connectable")
             .advertising
-              label(for="Advertising") Advertising 
-              input(id="Advertising", type="checkbox", name="Advertising")
+              label(for="advertising") Advertising 
+              input(id="advertising", type="checkbox", name="advertising")
         .row
             span Mode 
             label(for="mode0") 0 
@@ -22,7 +26,7 @@
             input(id="mode3", type="radio", value="3", name="mode")              
         .row
             span Secondary terminalId
-            input.secondaryTerminalIdInput
+            input(type="text", class="secondaryTerminalIdInput")
             button Save
         .row
             button DFU mode
