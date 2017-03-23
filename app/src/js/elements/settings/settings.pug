@@ -14,28 +14,32 @@
             .advertising
               label(for="advertising") Advertising 
               input(id="advertising", type="checkbox", name="advertising")
-        .row
+        .row.mode
             span Mode 
-            label(for="mode0") primaryId (0)
-            input(id="mode0", type="radio", value="0", name="mode")
-            label(for="mode1") secondaryTerminalId (1)
-            input(id="mode1", type="radio", value="1", name="mode")
-            label(for="mode2") iBeacon (2)
-            input(id="mode2", type="radio", value="2", name="mode")
-            label(for="mode3") primaryId + iBeacon (3)
-            input(id="mode3", type="radio", value="3", name="mode")   
+            .row
+                input(id="mode0", type="radio", value="0", name="mode")
+                label(for="mode0") primaryId (0)
+            .row            
+                input(id="mode1", type="radio", value="1", name="mode")
+                label(for="mode1") secondaryTerminalId (1)                
+            .row            
+                input(id="mode2", type="radio", value="2", name="mode")
+                label(for="mode2") iBeacon (2)                
+            .row
+                input(id="mode3", type="radio", value="3", name="mode")   
+                label(for="mode3") primaryId + iBeacon (3)
         .row
             span Blacklist
-            label(for="blacklistOn") On 
             input(id="blacklistOn", type="radio", value="0", name="blacklist")
-            label(for="blacklistOff") Off 
+            label(for="blacklistOn") On 
             input(id="blacklistOff", type="radio", value="1", name="blacklist")
+            label(for="blacklistOff") Off 
         .row
             span RSSI Verification
-            label(for="rssiVerificationOn") On 
             input(id="rssiVerificationOn", type="radio", value="0", name="rssiVerification")
-            label(for="rssiVerificationOff") Off 
+            label(for="rssiVerificationOn") On 
             input(id="rssiVerificationOff", type="radio", value="1", name="rssiVerification")
+            label(for="rssiVerificationOff") Off
         .row
             span Secondary terminalId
             input(type="text", class="secondaryTerminalIdInput")
