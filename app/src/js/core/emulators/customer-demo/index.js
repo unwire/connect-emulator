@@ -149,7 +149,6 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
                 break;
 
             case Command.settings:
-                console.log("Handle settings");
                 if (!this._didGetInitialSettings) {
                     this._didGetInitialSettings = true;
 
@@ -158,8 +157,6 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
                     settings[0] = packet[0] | 0x20;
 
                     // this.write(Command.settings, 0, settings);
-                } else {
-                    console.debug("Got settings", packet);
                 }
                 break;
 
@@ -194,9 +191,6 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
                 const state = (packet[0] << 8) | packet[1];
                 break;
 
-            default:
-                console.warn("Couldn't handle command:", header.command);
-                break
         }
     }
 

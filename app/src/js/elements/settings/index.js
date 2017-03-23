@@ -1,19 +1,53 @@
 const $ = require("jquery");
-const SettingsView = require("./view");
 const Command = require("../../core/terminal/command");
 const utils   = require("../../core/utils");
+const template = require("./settings.pug");
+// const {EventEmitter} = require("events");
 
-module.exports = exports = class Settings {
+module.exports = exports = class Settings {//extends EventEmitter {
 
     static get name() { return "Settings"; }
 
     constructor(terminal) {
         this.terminal = terminal;
-        this.meta = {};
-        this._view = new SettingsView(terminal);
+        this._el = template();
+        this._$el = $(this._el);
+        const self = this;
 
-        this._el  = this._view.el;
-        this._$el = this._view.$el;
+        this._$el.find(".ability input, .mode input").click(function() {
+            var sendSettings = 0;
+        	if($("#mode1").is(":checked")) {
+        		sendSettings = 1;
+        	} else if($("#mode2").is(":checked")) {
+        		sendSettings = 2;
+        	} else if($("#mode3").is(":checked")) {
+        		sendSettings = 3;
+        	}
+
+        	if($("#magnet").is(":checked")) {
+        		sendSettings = sendSettings | 0x10;
+        	}
+        	if($("#connectable").is(":checked")) {
+        		sendSettings = sendSettings | 0x20;
+        	}
+        	if($("#advertising").is(":checked")) {
+        		sendSettings = sendSettings | 0x40;
+        	}
+            self.write(Command.settings, "", [sendSettings]);
+        });
+
+        this._$el.find(".security input").click(function() {
+            var securitySettings = 0;
+        	if($("#blacklistOn").is(":checked")) {
+        		securitySettings = 1;
+        	}
+
+        	if($("#rssiVerificationOn").is(":checked")) {
+        		securitySettings = securitySettings | 2;
+        	}
+
+            self.write(Command.securitySetting, "", [securitySettings]);
+        });
     }
 
     get $el() {
@@ -25,7 +59,7 @@ module.exports = exports = class Settings {
     }
 
     get getSettings(){
-      this.write(Command.settings,"","");
+      this.write(Command.versionNumber);
     }
 
     showVersion(value){
@@ -33,15 +67,15 @@ module.exports = exports = class Settings {
     }
 
     showSettings(value){
-      this._$el.find("#magnet").prop('checked', (value[0] & 0x10) == 0);
-      this._$el.find("#connectable").prop('checked', (value[0] & 0x20) == 0);
-      this._$el.find("#advertising").prop('checked', (value[0] & 0x30) == 0);
+      this._$el.find("#magnet").prop('checked', ((value & 0x10) != 0));
+      this._$el.find("#connectable").prop('checked', ((value & 0x20) != 0));
+      this._$el.find("#advertising").prop('checked', ((value & 0x40) != 0));
 
-      if ((value[0] & 0x0F) == 1) {
+      if ((value & 0x0F) == 1) {
         this._$el.find("#mode1").prop('checked', true);
-      } else if ((value[0] & 0x0F) == 2) {
+      } else if ((value & 0x0F) == 2) {
         this._$el.find("#mode2").prop('checked', true);
-      } else if ((value[0] & 0x0F) == 3) {
+      } else if ((value & 0x0F) == 3) {
         this._$el.find("#mode3").prop('checked', true);
       } else {
         this._$el.find("#mode0").prop('checked', true);
@@ -99,21 +133,12 @@ module.exports = exports = class Settings {
         switch (header.command) {
             case Command.versionNumber:
                 const version = ((packet[0] << 8) & 0xFF00) + (packet[1] & 0x00FF);
-                console.debug("Version:", version);
                 this.showVersion(version);
-                this.meta.version = version;
                 this.write(Command.settings);
                 break;
             case Command.settings:
-                if (!this._didGetInitialSettings) {
-                    this._didGetInitialSettings = true;
-                    const settings = new Uint8Array(1);
-                    // settings[0] = packet[0] | 0x20;
-                    this.showSettings(packet[0]);
-                    this.write(Command.secondaryTerminalId);
-                } else {
-                    console.debug("Got settings", packet);
-                }
+                this.showSettings(packet[0]);
+                this.write(Command.secondaryTerminalId);
                 break;
             case Command.secondaryTerminalId:
                 this.showSecondayTerminalId(packet);
@@ -124,4 +149,9 @@ module.exports = exports = class Settings {
                 break;
         }
     }
+
+    // didConnect() {
+    //     this.write(Command.versionNumber);
+    // }
+
 };
