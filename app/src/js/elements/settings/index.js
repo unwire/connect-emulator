@@ -14,21 +14,7 @@ module.exports = exports = class Settings {
 
         this._el  = this._view.el;
         this._$el = this._view.$el;
-
-        console.log(this._$el);
-        console.log(this._$el.find("#version"));
-        // this._$el.find("#version").html("v1.0");
-
-        // console.log(this.terminal.connectionInfo);
-        // self = this
-        // setTimeout(function(){
-        //   console.log("oi");
-        //   self.write("settings","","");
-        // }, 2000);
-
     }
-
-
 
     get $el() {
         return this._$el;
@@ -39,8 +25,7 @@ module.exports = exports = class Settings {
     }
 
     get getSettings(){
-        console.log("get settings");
-          this.write("settings","","");
+      this.write(Command.settings,"","");
     }
 
     showVersion(value){
@@ -68,7 +53,6 @@ module.exports = exports = class Settings {
     }
 
     showSecuritySettings(value){
-      console.log(this._$el.find("#blacklistOn"));
       if ((value[0] & 0x01) == 1) {
         this._$el.find("#blacklistOn").prop('checked', true);
       } else {
@@ -120,9 +104,7 @@ module.exports = exports = class Settings {
                 this.meta.version = version;
                 this.write(Command.settings);
                 break;
-
             case Command.settings:
-                console.log("Handle settingss");
                 if (!this._didGetInitialSettings) {
                     this._didGetInitialSettings = true;
                     const settings = new Uint8Array(1);
@@ -134,24 +116,12 @@ module.exports = exports = class Settings {
                 }
                 break;
             case Command.secondaryTerminalId:
-                console.log("Handle secondaryTerminalId");
-                console.log(packet);
                 this.showSecondayTerminalId(packet);
                 this.write(Command.securitySetting);
-                console.log(Command.securitySetting);
                 break;
-            case Command.securitySetting || "254":
-                console.log("Handle securitySetting");
-                console.log(packet);
+            case Command.securitySetting:
                 this.showSecuritySettings(packet);
                 break;
-            default:
-                console.warn("WTF? Couldn't handle command:", header.command);
-                break
-
         }
     }
-
-
-
 };
