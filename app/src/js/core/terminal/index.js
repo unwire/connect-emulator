@@ -66,8 +66,8 @@ class Terminal extends EventEmitter {
             const packet = this.buffer.consume(this.currentHeader.expectedLength);
 
             if (packet) {
+                this.emit(this.currentHeader.command, this.currentHeader, packet);
                 this.emulator.handle(this.currentHeader, packet);
-                this.settings.handle(this.currentHeader, packet);
                 this._header = null;
             }
         }
@@ -82,7 +82,6 @@ class Terminal extends EventEmitter {
             if (this.connectionInfo) {
                 return resolve(false);
             }
-            console.debug("Connecting to: " + this.path);
             chrome.serial.connect(this.path, {
                 bitrate: 115200,
             }, (connectionInfo) => {
@@ -90,10 +89,10 @@ class Terminal extends EventEmitter {
 
                 if (this.connectionInfo) {
                     chrome.serial.setControlSignals(this.id, { dtr: true, rts: true }, (success) => {
+                        this.emit("connected", true);
                         resolve(success);
                     });
-                    console.debug("Connected..");
-                    this.settings.getSettings;
+
                 } else {
                     reject(chrome.runtime.lastError);
                 }

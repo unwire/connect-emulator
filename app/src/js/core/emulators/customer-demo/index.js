@@ -142,24 +142,6 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
 
     handle(header, packet) {
         switch (header.command) {
-            case Command.versionNumber:
-                console.debug("Version:", ((packet[0] << 8) & 0xFF00) + (packet[1] & 0x00FF));
-                this.setColor(0, 0, 1);
-                this.write(Command.settings);
-                break;
-
-            case Command.settings:
-                if (!this._didGetInitialSettings) {
-                    this._didGetInitialSettings = true;
-
-                    const settings = new Uint8Array(1);
-
-                    settings[0] = packet[0] | 0x20;
-
-                    // this.write(Command.settings, 0, settings);
-                }
-                break;
-
             case Command.connectionEvent:
                 this.setColor(1, 1, 0);
                 this._view.status("Device connected...");
@@ -180,9 +162,6 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
                 }
                 break;
 
-            case Command.pwmColor:
-                break;
-
             case Command.receiveEvent:
                 this.handleState(packet);
                 break;
@@ -193,9 +172,4 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
 
         }
     }
-
-    didConnect() {
-        this.write(Command.versionNumber);
-    }
-
 };

@@ -2,9 +2,8 @@ const $ = require("jquery");
 const Command = require("../../core/terminal/command");
 const utils   = require("../../core/utils");
 const template = require("./settings.pug");
-// const {EventEmitter} = require("events");
 
-module.exports = exports = class Settings {//extends EventEmitter {
+module.exports = exports = class Settings {
 
     static get name() { return "Settings"; }
 
@@ -14,7 +13,16 @@ module.exports = exports = class Settings {//extends EventEmitter {
         this._$el = $(this._el);
         const self = this;
 
-        this._$el.find(".ability input, .mode input").click(function() {
+        this.terminal.on("connected", (data) => {
+            this.write(Command.versionNumber);
+        });
+
+        this.terminal.on(Command.versionNumber, this.handleVersion.bind(this));
+        this.terminal.on(Command.settings, this.handleSettings.bind(this));
+        this.terminal.on(Command.secondaryTerminalId, this.handleSecondayTerminalId.bind(this));
+        this.terminal.on(Command.securitySetting, this.handleSecuritySettings.bind(this));
+
+        this._$el.find(".ability input, .mode input").click(() => {
             var sendSettings = 0;
         	if($("#mode1").is(":checked")) {
         		sendSettings = 1;
@@ -36,7 +44,7 @@ module.exports = exports = class Settings {//extends EventEmitter {
             self.write(Command.settings, "", [sendSettings]);
         });
 
-        this._$el.find(".security input").click(function() {
+        this._$el.find(".security input").click(() => {
             var securitySettings = 0;
         	if($("#blacklistOn").is(":checked")) {
         		securitySettings = 1;
@@ -49,10 +57,8 @@ module.exports = exports = class Settings {//extends EventEmitter {
             self.write(Command.securitySetting, "", [securitySettings]);
         });
 
-        this._$el.find(".secondaryTerminalId button").click(function() {
+        this._$el.find(".secondaryTerminalId button").click(() => {
             var setting = $(".secondaryTerminalIdInput").val();
-            console.log(setting);
-            console.log(utils.toByteArray(setting));
             self.write(Command.secondaryTerminalId, "", utils.toByteArray(setting));
         });
     }
@@ -65,42 +71,42 @@ module.exports = exports = class Settings {//extends EventEmitter {
         return this._el;
     }
 
-    get getSettings(){
-      this.write(Command.versionNumber);
+    handleVersion(header, packet){
+        const version = ((packet[0] << 8) & 0xFF00) + (packet[1] & 0x00FF);
+        this._$el.find("#version").html(version);
+        this.write(Command.settings);
     }
 
-    showVersion(value){
-      this._$el.find("#version").html(value);
-    }
+    handleSettings(header, packet){
+      this._$el.find("#magnet").prop('checked', ((packet[0] & 0x10) != 0));
+      this._$el.find("#connectable").prop('checked', ((packet[0] & 0x20) != 0));
+      this._$el.find("#advertising").prop('checked', ((packet[0] & 0x40) != 0));
 
-    showSettings(value){
-      this._$el.find("#magnet").prop('checked', ((value & 0x10) != 0));
-      this._$el.find("#connectable").prop('checked', ((value & 0x20) != 0));
-      this._$el.find("#advertising").prop('checked', ((value & 0x40) != 0));
-
-      if ((value & 0x0F) == 1) {
+      if ((packet[0] & 0x0F) == 1) {
         this._$el.find("#mode1").prop('checked', true);
-      } else if ((value & 0x0F) == 2) {
+      } else if ((packet[0] & 0x0F) == 2) {
         this._$el.find("#mode2").prop('checked', true);
-      } else if ((value & 0x0F) == 3) {
+      } else if ((packet[0] & 0x0F) == 3) {
         this._$el.find("#mode3").prop('checked', true);
       } else {
         this._$el.find("#mode0").prop('checked', true);
       }
+      this.write(Command.secondaryTerminalId);
     }
 
-    showSecondayTerminalId(value){
-      this._$el.find(".secondaryTerminalIdInput").val(utils.toHexString(value));
+    handleSecondayTerminalId(header, packet){
+      this._$el.find(".secondaryTerminalIdInput").val(utils.toHexString(packet));
+      this.write(Command.securitySetting);
     }
 
-    showSecuritySettings(value){
-      if ((value[0] & 0x01) == 1) {
+    handleSecuritySettings(header, packet){
+      if ((packet[0] & 0x01) == 1) {
         this._$el.find("#blacklistOn").prop('checked', true);
       } else {
         this._$el.find("#blacklistOff").prop('checked', true);
       }
 
-      if ((value[0] & 0x02) == 2) {
+      if ((packet[0] & 0x02) == 2) {
         this._$el.find("#rssiVerificationOn").prop('checked', true);
       } else {
         this._$el.find("#rssiVerificationOff").prop('checked', true);
@@ -135,30 +141,4 @@ module.exports = exports = class Settings {//extends EventEmitter {
         // Send it
         this.terminal.write(buffer);
     }
-
-    handle(header, packet) {
-        switch (header.command) {
-            case Command.versionNumber:
-                const version = ((packet[0] << 8) & 0xFF00) + (packet[1] & 0x00FF);
-                this.showVersion(version);
-                this.write(Command.settings);
-                break;
-            case Command.settings:
-                this.showSettings(packet[0]);
-                this.write(Command.secondaryTerminalId);
-                break;
-            case Command.secondaryTerminalId:
-                this.showSecondayTerminalId(packet);
-                this.write(Command.securitySetting);
-                break;
-            case Command.securitySetting:
-                this.showSecuritySettings(packet);
-                break;
-        }
-    }
-
-    // didConnect() {
-    //     this.write(Command.versionNumber);
-    // }
-
 };
