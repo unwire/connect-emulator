@@ -5,13 +5,13 @@
               span Version 
               span(id="version") 0
         .row.ability
-            .magnet
+            .row.magnet
               label(for="magnet") Magnet 
               input(id="magnet", type="checkbox", name="magnet")
-            .connectable
+            .row.connectable
               label(for="connectable") Connectable 
               input(id="connectable", type="checkbox", name="connectable")
-            .advertising
+            .row.advertising
               label(for="advertising") Advertising 
               input(id="advertising", type="checkbox", name="advertising")
         .row.mode
@@ -40,11 +40,7 @@
             label(for="rssiVerificationOn") On 
             input(id="rssiVerificationOff", type="radio", value="1", name="rssiVerification")
             label(for="rssiVerificationOff") Off
-        .row
+        .row.secondaryTerminalId
             span Secondary terminalId
             input(type="text", class="secondaryTerminalIdInput")
-            button Save
-        .row
-            button DFU mode
-            button No Serial
-            button Test Serial
+            button Set

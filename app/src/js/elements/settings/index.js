@@ -48,6 +48,13 @@ module.exports = exports = class Settings {//extends EventEmitter {
 
             self.write(Command.securitySetting, "", [securitySettings]);
         });
+
+        this._$el.find(".secondaryTerminalId button").click(function() {
+            var setting = $(".secondaryTerminalIdInput").val();
+            console.log(setting);
+            console.log(utils.toByteArray(setting));
+            self.write(Command.secondaryTerminalId, "", utils.toByteArray(setting));
+        });
     }
 
     get $el() {

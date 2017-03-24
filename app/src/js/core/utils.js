@@ -53,3 +53,17 @@ exports.toHexString = function(arr) {
 
   return result;
 }
+
+exports.toByteArray = function(str) {
+  var result = [];
+
+  for (var i = 0, len = str.length; i < len; i+=2) {
+      result.push(parseInt(str.substr(i,2),16));
+  }
+
+  while(result.length <6 ){
+      result.push(0);
+  }
+
+  return result;
+}
