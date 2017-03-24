@@ -67,7 +67,6 @@ class Terminal extends EventEmitter {
 
             if (packet) {
                 this.emit(this.currentHeader.command, this.currentHeader, packet);
-                this.emulator.handle(this.currentHeader, packet);
                 this._header = null;
             }
         }

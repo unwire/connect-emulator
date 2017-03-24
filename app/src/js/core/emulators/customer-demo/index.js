@@ -17,6 +17,11 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
         this._el  = this._view.el;
         this._$el = this._view.$el;
 
+        this.terminal.on(Command.connectionEvent, this.onConnectionEvent.bind(this));
+        this.terminal.on(Command.disconnectionEvent, this.onDisconnectionEvent.bind(this));
+        this.terminal.on(Command.connectionInitiated, this.onConnectionInitiated.bind(this));
+        this.terminal.on(Command.receiveEvent, this.onReceiveEvent.bind(this));
+        this.terminal.on(Command.transmitRequest, this.onTransmitRequest.bind(this));
     }
 
     /**
@@ -140,36 +145,32 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
         }
     }
 
-    handle(header, packet) {
-        switch (header.command) {
-            case Command.connectionEvent:
-                this.setColor(1, 1, 0);
-                this._view.status("Device connected...");
-                break;
+    onConnectionEvent(header, packet){
+        this.setColor(1, 1, 0);
+        this._view.status("Device connected...");
+    }
 
-            case Command.disconnectionEvent:
-                this.setColor(0, 0, 1);
-                this._view.status("Ready.");
-                break;
+    onDisconnectionEvent(header, packet){
+        this.setColor(0, 0, 1);
+        this._view.status("Ready.");
+    }
 
-            case Command.connectionInitiated:
-                if (packet[0] === 0) {
-                    this.setColor(1, 1, 0);
-                this._view.status("Device connecting...");
-                } else {
-                    this.setColor(0, 0, 1);
-                this._view.status("Device disconnecting...");
-                }
-                break;
-
-            case Command.receiveEvent:
-                this.handleState(packet);
-                break;
-
-            case Command.transmitRequest:
-                const state = (packet[0] << 8) | packet[1];
-                break;
-
+    onConnectionInitiated(header, packet){
+        if (packet[0] === 0) {
+            this.setColor(1, 1, 0);
+        this._view.status("Device connecting...");
+        } else {
+            this.setColor(0, 0, 1);
+        this._view.status("Device disconnecting...");
         }
+    }
+
+    onReceiveEvent(header, packet){
+        this.handleState(packet);
+    }
+
+    onTransmitRequest(header, packet){
+        this.setColor(1, 1, 0);
+        this._view.status("Device connected...");
     }
 };
