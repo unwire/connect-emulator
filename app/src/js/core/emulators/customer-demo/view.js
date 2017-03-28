@@ -86,7 +86,7 @@ module.exports = exports = class CustomerDemoView extends EventEmitter {
         this._amount = false;
         this._input.cancel();
         this._$el.find(".numpad button").prop("disabled", false);
-        if(this._auto == true){
+        if(this._auto){
             this._input.number(Math.floor((Math.random() * 15) + 190));
             this.commit();
         }

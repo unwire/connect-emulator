@@ -98,6 +98,10 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
                 switch (status) {
                     case "accept":
                         response = "success";
+                        if(this._view._auto && Math.floor(Math.random() * 10) == 0){
+                            console.log("Payment failed");
+                            response = "decline";
+                        }
                         break
                     case "decline":
                         response = "decline";
