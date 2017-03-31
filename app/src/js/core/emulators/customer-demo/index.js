@@ -53,7 +53,7 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
         buffer.set(dataArr, bytes.length);
 
         // Send it
-        super.write(buffer);
+        return super.write(buffer);
     }
 
     setColor(r, g, b) {
@@ -63,7 +63,7 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
         bytes[1] = g;
         bytes[2] = b;
 
-        this.write(Command.pwmColor, 0, bytes);
+        return this.write(Command.pwmColor, 0, bytes);
     }
 
     /**
@@ -162,10 +162,10 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
     onConnectionInitiated(header, packet){
         if (packet[0] === 0) {
             this.setColor(1, 1, 0);
-        this._view.status("Device connecting...");
+            this._view.status("Device connecting...");
         } else {
             this.setColor(0, 0, 1);
-        this._view.status("Device disconnecting...");
+            this._view.status("Device disconnecting...");
         }
     }
 
@@ -176,5 +176,10 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
     onTransmitRequest(header, packet){
         this.setColor(1, 1, 0);
         this._view.status("Device connected...");
+    }
+
+    async onSerialDisconnect() {
+        await this.write(0x04, 0x04, "failure");
+        await this.setColor(0, 0, 1);
     }
 };

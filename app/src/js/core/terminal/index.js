@@ -54,6 +54,7 @@ class Terminal extends EventEmitter {
      */
 
     didReceiveBytes(bytes) {
+
         this.buffer.push(bytes);
 
         if (!this.currentHeader) {
@@ -88,7 +89,7 @@ class Terminal extends EventEmitter {
 
                 if (this.connectionInfo) {
                     chrome.serial.setControlSignals(this.id, { dtr: true, rts: true }, (success) => {
-                        this.emit("connected", true);
+                        this.emit("serialConnected", true);
                         resolve(success);
                     });
 
@@ -99,13 +100,29 @@ class Terminal extends EventEmitter {
         });
     }
 
-    disconnect() {
-        return new Promise((resolve, reject) => {
-            chrome.serial.disconnect(this.id, (success) => {
-                this._connectionInfo = null;
+    flush() {
+        return new Promise((resolve) => {
+            const self = this;
+            chrome.serial.flush(this.id, function(){
+                setTimeout(function(){ // #NASTYHACK
+                    chrome.serial.disconnect(self.id, (success) => {
+                         this._connectionInfo = null;
+                    });
+                }, 25);
+
                 resolve();
             });
         });
+    }
+
+    async disconnect() {
+        try {
+            await this._emulator.onSerialDisconnect();
+            await this.flush();
+        }
+        catch (e) {
+            console.error(`Error: ${e.toString()}`);
+        }
     }
 
     write(bytes) {

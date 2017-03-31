@@ -106,6 +106,8 @@ class Serial extends EventEmitter {
 
 }
 
+const _serial = new Serial();
+
 chrome.serial.onReceive.addListener((event) => {
     if (exports.activeTerminal && event.data) {
         const bytes = new Uint8Array(event.data);
@@ -114,7 +116,7 @@ chrome.serial.onReceive.addListener((event) => {
 });
 
 chrome.serial.onReceiveError.addListener((event) => {
-    serial.disconnect();
+    _serial.disconnect();
 });
 
-module.exports = exports = new Serial();
+module.exports = exports = _serial;

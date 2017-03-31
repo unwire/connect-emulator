@@ -25,6 +25,8 @@ module.exports = exports = class Base extends EventEmitter {
 
     handle(header, bytes) { }
 
+    async onSerialDisconnect() { }
+
     /**
      * Properties
      */

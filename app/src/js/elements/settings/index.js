@@ -13,7 +13,7 @@ module.exports = exports = class Settings {
         this._$el = $(this._el);
         const self = this;
 
-        this.terminal.on("connected", (data) => {
+        this.terminal.on("serialConnected", (data) => {
             this.write(Command.versionNumber);
         });
 
