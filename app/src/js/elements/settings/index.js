@@ -57,8 +57,8 @@ module.exports = exports = class Settings {
             self.write(Command.securitySetting, "", [securitySettings]);
         });
 
-        this._$el.find(".secondaryTerminalId button").click(() => {
-            var setting = $(".secondaryTerminalIdInput").val();
+        this._$el.find(".terminalId button").click(() => {
+            var setting = $(".terminalId input").val();
             self.write(Command.secondaryTerminalId, "", utils.toByteArray(setting));
         });
     }
