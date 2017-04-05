@@ -17,6 +17,7 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
         this._el  = this._view.el;
         this._$el = this._view.$el;
 
+        this.terminal.on(Command.settings, this.onSettings.bind(this));
         this.terminal.on(Command.connectionEvent, this.onConnectionEvent.bind(this));
         this.terminal.on(Command.disconnectionEvent, this.onDisconnectionEvent.bind(this));
         this.terminal.on(Command.connectionInitiated, this.onConnectionInitiated.bind(this));
@@ -146,6 +147,15 @@ module.exports = exports = class CustomerDemo extends BaseEmulator {
             default:
                 console.log("Unknown state:", state);
                 break
+        }
+    }
+
+    onSettings(header, packet){
+        if (!this._didGetInitialSettings) {
+            this._didGetInitialSettings = true;
+            const settings = new Uint8Array(1);
+            settings[0] = packet[0] | 0x20;
+            this.write(Command.settings, 0, settings);
         }
     }
 
