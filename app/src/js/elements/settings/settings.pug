@@ -1,46 +1,43 @@
+mixin checkbox(name, text)
+    label(for=name).control.checkbox
+        input(type="checkbox", id=name, name=name)
+        .indicator
+        span= text
+
+mixin radio(name, id, value, text)
+    label(for=id).control.radio
+        input(type="radio", id=id, name=name, value=value)
+        .indicator
+        span= text
+
 .settings
-    .container
-        .row
-            .meta
-              span Version 
-              span(id="version") 0
-        .row.ability
-            .row.magnet
-              label(for="magnet") Magnet 
-              input(id="magnet", type="checkbox", name="magnet")
-            .row.connectable
-              label(for="connectable") Connectable 
-              input(id="connectable", type="checkbox", name="connectable")
-            .row.advertising
-              label(for="advertising") Advertising 
-              input(id="advertising", type="checkbox", name="advertising")
-        .row.mode
-            span Mode 
-            .row
-                input(id="mode0", type="radio", value="0", name="mode")
-                label(for="mode0") primaryId (0)
-            .row            
-                input(id="mode1", type="radio", value="1", name="mode")
-                label(for="mode1") secondaryTerminalId (1)                
-            .row            
-                input(id="mode2", type="radio", value="2", name="mode")
-                label(for="mode2") iBeacon (2)                
-            .row
-                input(id="mode3", type="radio", value="3", name="mode")   
-                label(for="mode3") primaryId + iBeacon (3)
-        .row.security
-            span Blacklist
-            input(id="blacklistOn", type="radio", value="0", name="blacklist")
-            label(for="blacklistOn") On 
-            input(id="blacklistOff", type="radio", value="1", name="blacklist")
-            label(for="blacklistOff") Off 
-        .row.security
-            span RSSI Verification
-            input(id="rssiVerificationOn", type="radio", value="0", name="rssiVerification")
-            label(for="rssiVerificationOn") On 
-            input(id="rssiVerificationOff", type="radio", value="1", name="rssiVerification")
-            label(for="rssiVerificationOff") Off
-        .row.secondaryTerminalId
-            span Secondary terminalId
-            input(type="text", class="secondaryTerminalIdInput")
-            button Set
+        .container
+                label.control
+                    #version 0
+                    span Version
+
+                .ability
+                    +checkbox("magnet", "Uses magnets")
+                    +checkbox("connectable", "Is connectable")
+                    +checkbox("advertising", "Is advertising")
+
+                .mode
+                    h2 Mode
+                    +radio("mode", "mode0", 0, "#0: Primary ID")
+                    +radio("mode", "mode1", 1, "#1: Secondary ID")
+                    +radio("mode", "mode2", 2, "#2: iBeacon")
+                    +radio("mode", "mode3", 3, "#3: Primary ID & iBeacon")
+
+                .security
+                    h2 Blacklist
+                    +radio("blacklist", "blacklistOn", 0, "Active")
+                    +radio("blacklist", "blacklistOff", 1, "Inactive")
+
+                    h2 RSSI Verification
+                    +radio("rssiVerification", "rssiVerificationOn", 0, "Active")
+                    +radio("rssiVerification", "rssiVerificationOff", 1, "Inactive")
+
+                .terminalId
+                    h2 Secondary ID
+                    input(type="text", class="secondaryTerminalIdInput")
+                    button Set

@@ -1,4 +1,6 @@
 .customer-demo
+    position relative
+
     .status
         display block
         font 20px/20px monospace
@@ -8,13 +10,15 @@
         float left
 
     .autoModeContainer
-        width 60px
-        float left
-        text-align right
+        position absolute
+        top 0
+        right 0
 
         label
-          color #fff
-          margin-right 5px
+            color #fff
+
+            .indicator
+                margin-right 0
 
     .input
         display block
