@@ -95,7 +95,7 @@ module.exports = exports = class Settings {
     }
 
     handleSecondayTerminalId(header, packet){
-      this._$el.find(".secondaryTerminalIdInput").val(utils.toHexString(packet));
+      this._$el.find(".secondaryTerminalIdInput").val(utils.toHexString(packet).split("").reverse().join(""));
       this.write(Command.securitySetting);
     }
 
