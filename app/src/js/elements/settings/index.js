@@ -59,7 +59,7 @@ module.exports = exports = class Settings {
 
         this._$el.find(".terminalId button").click(() => {
             var setting = $(".terminalId input").val();
-            self.write(Command.secondaryTerminalId, "", utils.toByteArray(setting));
+            self.write(Command.secondaryTerminalId, "", utils.toByteArray(setting.split("").reverse().join("")));
         });
     }
 
