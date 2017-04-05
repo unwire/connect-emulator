@@ -59,7 +59,7 @@ module.exports = exports = class Settings {
 
         this._$el.find(".terminalId button").click(() => {
             var setting = $(".terminalId input").val();
-            self.write(Command.secondaryTerminalId, "", utils.toByteArray(setting.split("").reverse().join("")));
+            self.write(Command.secondaryTerminalId, "", utils.toByteArray(setting).reverse());
         });
     }
 
@@ -95,7 +95,7 @@ module.exports = exports = class Settings {
     }
 
     handleSecondayTerminalId(header, packet){
-      this._$el.find(".secondaryTerminalIdInput").val(utils.toHexString(packet).split("").reverse().join(""));
+      this._$el.find(".secondaryTerminalIdInput").val(utils.toHexString(packet.reverse()));
       this.write(Command.securitySetting);
     }
 

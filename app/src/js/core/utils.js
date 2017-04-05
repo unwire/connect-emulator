@@ -48,7 +48,11 @@ exports.toHexString = function(arr) {
   var result = "";
 
   for (var i = 0, len = arr.length; i < len; i++) {
-      result += arr[i].toString(16);
+      var str = arr[i].toString(16);
+      if (str.length < 2) {
+        str = `0${str}`;
+      }
+      result += str;
   }
 
   return result;
