@@ -1,0 +1,137 @@
+COLOR_CHECKED = lighten(COLOR_BASE_LIGHT, 10%)
+COLOR_CHECKED_HOVER = lighten(COLOR_CHECKED, 10%)
+COLOR_INDICATOR             = #e6e6e6
+COLOR_INDICATOR_HOVER       = #ccc
+COLOR_INDICATOR_DISABLED    = #7b7b7b
+
+.control
+    display block
+    position relative
+    cursor pointer
+
+    // Hide default browser input
+    input
+        position absolute
+        z-index -1
+        opacity 0
+
+    span
+        display inline-block
+
+.indicator
+    position relative
+    display inline-block
+    height 14px
+    width 14px
+    background COLOR_INDICATOR
+    margin auto 5px -2px 5px
+
+    .radio &
+        border-radius 50%
+
+    // Hover and focus
+    .control:hover input ~ &
+        background COLOR_INDICATOR_HOVER
+
+    // Hover and focus
+    .control:active input ~ &
+        background darken(COLOR_INDICATOR_HOVER, 10%)
+
+    // Checked
+    .control input:checked ~ &
+        background COLOR_CHECKED
+
+    // Hover when checked
+    .control:hover input:not([disabled]):checked ~ &
+        background COLOR_CHECKED_HOVER
+
+    // Hide default browser input
+    .control input:disabled ~ &
+        background COLOR_INDICATOR
+        opacity 0.6
+        pointer-events none
+
+    &:after
+        content ''
+        position absolute
+        display none // Hide check
+
+        .control input:checked ~ &
+            display block // Show check
+
+        // Checkbox tick
+        .checkbox &
+            left 5px
+            top 2px
+            width 2px
+            height 7px
+            border solid #fff
+            border-width 0 2px 2px 0
+            transform rotate(45deg)
+
+        // Disabled tick colour
+        .checkbox input:disabled ~ &
+            border-color COLOR_INDICATOR_DISABLED
+
+        // Radio button inner circle
+        .radio &
+            left 4px
+            top 4px
+            height 6px
+            width 6px
+            border-radius 50%
+            background #fff
+
+        // Disabled circle colour
+        .radio input:disabled ~ &
+            background COLOR_INDICATOR_DISABLED
+
+.select
+    position relative
+    display inline-block
+    margin-bottom 15px
+    width 100%
+
+    select
+        display inline-block
+        width 100%
+        cursor pointer
+        padding 10px 15px
+        outline 0
+        border 0
+        border-radius 0
+        background COLOR_INDICATOR
+        color COLOR_INDICATOR_DISABLED
+        appearance none
+        -webkit-appearance none
+        -moz-appearance none
+
+        &::-ms-expand
+            display none
+
+        &:hover,
+        &:focus
+            color #000
+            background COLOR
+
+        &:disabled
+            opacity 0.5
+            pointer-events none
+
+    .arrow
+        position absolute
+        top 16px
+        right 15px
+        width 0
+        height 0
+        pointer-events none
+        border-style solid
+        border-width 8px 5px 0 5px
+        border-color COLOR_INDICATOR_HOVER transparent transparent transparent
+
+        .select select:hover ~ &
+        .select select:focus ~ &
+            border-top-color #000
+
+        .select select:disabled ~ &
+            border-top-color COLOR_INDICATOR_HOVER
