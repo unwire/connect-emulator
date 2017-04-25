@@ -63,4 +63,9 @@ for(var i = 0; i < emulators.length; i++) {
     $emulators.append(`<option value="${i}">${emulators[i].name}</option>`);
 }
 
+if (emulators.length==1){
+    $emulators.hide();
+}
+
+
 module.exports = exports = $header;
