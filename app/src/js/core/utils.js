@@ -1,26 +1,15 @@
 module.exports = exports = {};
 
 exports.ab2str = function(buf) {
-    return String.fromCharCode.apply(null, new Uint16Array(buf));
+    return new TextDecoder("utf-8").decode(new Uint8Array(buf));
 }
 
 exports.str2ab = function(str) {
-    var buf = new ArrayBuffer(str.length * 2); // 2 bytes for each char
-    var bufView = new Uint16Array(buf);
-    for (var i = 0, strLen = str.length; i < strLen; i++) {
-        bufView[i] = str.charCodeAt(i);
-    }
-    return buf;
+    return new ArrayBuffer(new TextEncoder("utf-8").encode(str));
 }
 
 exports.str2uint8arr = function(str) {
-    var arr = new Uint8Array(str.length);
-
-    for (var i = 0, strLen = str.length; i < strLen; i++) {
-        arr[i] = str.charCodeAt(i);
-    }
-
-    return arr;
+    return new Uint8Array(new TextEncoder("utf-8").encode(str));
 }
 
 exports.uint8arr2ab = function(arr) {
@@ -35,13 +24,7 @@ exports.uint8arr2ab = function(arr) {
 }
 
 exports.uint8arr2str = function(arr) {
-    var result = "";
-
-    for (var i = 0, len = arr.length; i < len; i++) {
-        result += String.fromCharCode(arr[i]);
-    }
-
-    return result;
+    return new TextDecoder("utf-8").decode(arr);
 }
 
 exports.toHexString = function(arr) {
