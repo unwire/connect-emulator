@@ -41,6 +41,10 @@ module.exports = exports = class Settings {
         	if($("#advertising").is(":checked")) {
         		sendSettings = sendSettings | 0x40;
         	}
+            if($("#lockscreen").is(":checked")) {
+        		sendSettings = sendSettings | 0x80;
+        	}
+
             self.write(Command.settings, "", [sendSettings]);
         });
 
@@ -75,12 +79,17 @@ module.exports = exports = class Settings {
         const version = ((packet[0] << 8) & 0xFF00) + (packet[1] & 0x00FF);
         this._$el.find("#version").html(version);
         this.write(Command.settings);
+        if (version < 37){
+            this._$el.find("#lockscreen").prop('disabled', true);
+            this._$el.find('label[for="lockscreen"]').addClass("disabled");
+        }
     }
 
     handleSettings(header, packet){
       this._$el.find("#magnet").prop('checked', ((packet[0] & 0x10) != 0));
       this._$el.find("#connectable").prop('checked', ((packet[0] & 0x20) != 0));
       this._$el.find("#advertising").prop('checked', ((packet[0] & 0x40) != 0));
+      this._$el.find("#lockscreen").prop('checked', ((packet[0] & 0x80) != 0));
 
       if ((packet[0] & 0x0F) == 1) {
         this._$el.find("#mode1").prop('checked', true);
