@@ -4,8 +4,9 @@
   "description": "Chrome app for the Nets dongle",
   "main": "main.js",
   "scripts": {
-    "dev": "webpack --watch",
-    "build": "NODE_ENV=production && webpack"
+    "dev": "export NODE_ENV=development && webpack --watch",
+    "build": "export NODE_ENV=production && webpack",
+    "external": "export NODE_ENV=external && webpack"
   },
   "keywords": [
     "nets",

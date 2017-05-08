@@ -12,7 +12,7 @@ module.exports = exports = class Buffer {
         }
 
         if (!(arr instanceof Uint8Array)) {
-            throw new Error("You can only push an Uint8Array or an ArrayBuffer.");
+            throw new Error("You can only push a Uint8Array or an ArrayBuffer.");
         }
 
         const newBuffer = new Uint8Array(this._buffer.length + arr.length);

@@ -1,7 +1,7 @@
-const $ = require("jquery");
-const serial = require("../../core/serial");
-const template = require("./tabs.pug");
-const Settings = require("../settings")
+const $        = require("jquery");
+const serial   = require("core/serial");
+
+const template = require("./view.pug");
 
 /**
  * Elements
@@ -44,7 +44,7 @@ serial.on("activeTerminal", (terminal) => {
         $tabEmulator.html("");
         $tabEmulator.append(terminal.emulator.$el);
         $tabSettings.html("");
-        $tabSettings.append(terminal.settings.$el);
+        $tabSettings.append(require("views/settings"));
     } else {
         $tabEmulator.html(noConnection);
         $tabSettings.html(noConnection);
