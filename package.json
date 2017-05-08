@@ -4,9 +4,9 @@
   "description": "Chrome app for the Nets dongle",
   "main": "main.js",
   "scripts": {
-    "dev": "export NODE_ENV=development && webpack --watch",
-    "build": "export NODE_ENV=production && webpack",
-    "external": "export NODE_ENV=external && webpack"
+    "dev": "webpack --watch",
+    "build": "NODE_ENV=production && webpack",
+    "pack": "npm run build; crx pack ./app -p app.pem"
   },
   "keywords": [
     "nets",
@@ -28,6 +28,7 @@
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-stage-0": "^6.22.0",
     "babel-runtime": "^6.23.0",
+    "crx": "^3.2.1",
     "css-loader": "^0.25.0",
     "event-emitter": "^0.3.4",
     "extract-text-webpack-plugin": "^2.1.0",

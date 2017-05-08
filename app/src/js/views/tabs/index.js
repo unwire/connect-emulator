@@ -1,5 +1,6 @@
-const $        = require("jquery");
-const serial   = require("core/serial");
+const $         = require("jquery");
+const serial    = require("core/serial");
+const emulators = require("emulators");
 
 const template = require("./view.pug");
 
@@ -15,7 +16,7 @@ const $tabLog       = $tabs.find("section.tabs > div#tab-log");
 const $log          = $tabLog.find("ul.log");
 const $allTabs      = $tabs.find("section.tabs > div");
 const $allItems     = $tabs.find("ul.tabs li");
-const noConnection  = `<h1 class="not-connected">Choose a device and an emulator &mdash; and press Connect.</h1>`;
+const noConnection  = `<h1 class="not-connected">Choose a device ${emulators.length > 1?"and an emulator":""} &mdash; and press Connect.</h1>`;
 
 /**
  * Variables
