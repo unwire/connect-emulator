@@ -38,7 +38,6 @@
     "nib": "^1.1.2",
     "pug": "^2.0.0-beta11",
     "pug-loader": "^2.3.0",
-    "ssg-web-sdk": "git+ssh://git@stash.unwire.dk:7999/ssg/ssg-web-sdk.git#v1.5.5",
     "style-loader": "^0.13.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^2.3.1",
