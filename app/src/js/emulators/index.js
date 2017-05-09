@@ -1,5 +1,7 @@
+const external = require("./external");
+const internal = require("./internal");
+
 module.exports = exports = [
-    require("./customer-demo"),
-    require("./nets-v1"),
-    require("./nets-v2"),
+    ...external,
+    ...internal,
 ];
