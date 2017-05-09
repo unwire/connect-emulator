@@ -1,16 +1,16 @@
 {
   "name": "uc-chrome-dongle-ext",
   "version": "1.0.0",
-  "description": "Chrome app for the Nets dongle",
+  "description": "Chrome app for the Unwire Connect dongle",
   "main": "main.js",
   "scripts": {
     "dev": "webpack --watch",
     "build": "NODE_ENV=production && webpack",
-    "pack": "npm run build; crx pack ./app -p app.pem"
+    "crx": "npm run build; crx pack ./app -p app.pem -o unwire-connect-emulator.crx"
   },
   "keywords": [
-    "nets",
     "unwire",
+    "connect", 
     "dongle",
     "chrome",
     "app"
