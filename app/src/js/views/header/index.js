@@ -1,7 +1,8 @@
-const $ = require("jquery");
-const serial = require("../../core/serial");
-const template = require("./header.pug");
-const emulators = require("../../core/emulators");
+const $         = require("jquery");
+const emulators = require("emulators");
+const serial    = require("core/serial");
+
+const template  = require("./view.pug");
 
 /**
  * Elements

@@ -1,9 +1,10 @@
 const {EventEmitter} = require("events");
+const utils          = require("core/utils");
+const Settings       = require("views/settings");
+
 const Command = require("./command");
 const Buffer  = require("./buffer");
 const Header  = require("./header");
-const utils   = require("../utils");
-const Settings = require("../../elements/settings");
 
 class Terminal extends EventEmitter {
 
@@ -14,7 +15,6 @@ class Terminal extends EventEmitter {
         this._buffer = new Buffer();
         this._header = null;
         this._emulator = new emulator(this);
-        this._settings = new Settings(this);
     }
 
     /**
@@ -54,7 +54,6 @@ class Terminal extends EventEmitter {
      */
 
     didReceiveBytes(bytes) {
-
         this.buffer.push(bytes);
 
         if (!this.currentHeader) {

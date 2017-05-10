@@ -1,5 +1,5 @@
 const {EventEmitter} = require("events");
-const Terminal = require("../terminal");
+const Terminal       = require("core/terminal");
 
 class Serial extends EventEmitter {
 
@@ -106,17 +106,16 @@ class Serial extends EventEmitter {
 
 }
 
-const _serial = new Serial();
-
 chrome.serial.onReceive.addListener((event) => {
     if (exports.activeTerminal && event.data) {
         const bytes = new Uint8Array(event.data);
+
         exports.activeTerminal.didReceiveBytes(bytes);
     }
 });
 
 chrome.serial.onReceiveError.addListener((event) => {
-    _serial.disconnect();
+    exports.disconnect();
 });
 
-module.exports = exports = _serial;
+module.exports = exports = new Serial();

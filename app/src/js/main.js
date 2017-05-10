@@ -5,7 +5,7 @@ const $ = require("jquery");
 $(document).ready(() => {
     const $body = $("body");
 
-    require("./elements").forEach(element => $body.append(element));
+    require("views").forEach(element => $body.append(element));
 
     console.log("Ready.");
 });
