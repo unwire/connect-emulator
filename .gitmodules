@@ -1,0 +1,3 @@
+[submodule "app/src/js/emulators/internal"]
+	path = app/src/js/emulators/internal
+	url = ssh://git@bitbucket.unwire.dk:7999/rd/connect-emulator-internal.git
