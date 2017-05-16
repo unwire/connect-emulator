@@ -89,6 +89,7 @@ module.exports = exports = class extends Emulator {
                 } else {
                     this._inputView.once("commit", (value) => {
                         this._amount = value;
+                        commitAmount();
                     });
                 }
                 break;
