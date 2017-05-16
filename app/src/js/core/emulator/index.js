@@ -94,6 +94,7 @@ module.exports = exports = class Base extends EventEmitter {
             settings.isBackgroundSupported = (packet[0] & 0x80) !== 0;
 
             if (!this._didGetInitialSettings) {
+                this._didGetInitialSettings = true;
                 this.isConnectable = true;
             }
 
