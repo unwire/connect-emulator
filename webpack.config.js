@@ -6,7 +6,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const plugins = [
     new webpack.DefinePlugin({
-        env: process.env,
+        env: JSON.stringify(process.env)
     }),
     new ExtractTextPlugin("styles.css")
 ];
