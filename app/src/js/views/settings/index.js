@@ -32,25 +32,29 @@ var updateHandler, isEnabled = false, settings = {
  */
 const $settings = $(template());
 
-$settings.find("input:not(input[type='text']), button").click(function() {
-    settings.mode = parseInt($settings.find("input[name='mode']:checked").val(), 10) || 0;
+function setListener(){
+  $settings.find("input:not(input[type='text']), button").click(function() {
+      settings.mode = parseInt($settings.find("input[name='mode']:checked").val(), 10) || 0;
 
-    settings.secondaryId = $settings.find("input.secondary").val();
+      settings.secondaryId = $settings.find("input.secondary").val();
 
-    settings.isUsingMagnets = $settings.find("input.usesMagnets").is(":checked");
-    settings.isConnectable  = $settings.find("input.connectable").is(":checked");
-    settings.isAdvertising  = $settings.find("input.advertising").is(":checked");
-    settings.isBackgroundSupported = $settings.find("input.background").is(":checked");
+      settings.isUsingMagnets = $settings.find("input.usesMagnets").is(":checked");
+      settings.isConnectable  = $settings.find("input.connectable").is(":checked");
+      settings.isAdvertising  = $settings.find("input.advertising").is(":checked");
+      settings.isBackgroundSupported = $settings.find("input.background").is(":checked");
 
-    settings.isBlacklistEnabled       = $settings.find("input[name='blacklist']:checked").attr("id").indexOf("On") !== -1;
-    settings.isRssiVerficationEnabled = $settings.find("input[name='rssiVerification']:checked").attr("id").indexOf("On") !== -1;
+      settings.isBlacklistEnabled       = $settings.find("input[name='blacklist']:checked").attr("id").indexOf("On") !== -1;
+      settings.isRssiVerficationEnabled = $settings.find("input[name='rssiVerification']:checked").attr("id").indexOf("On") !== -1;
 
-    if (updateHandler && typeof(updateHandler) === "function") {
-        updateHandler(settings);
-    }
-});
-
-module.exports = exports = $settings;
+      if (updateHandler && typeof(updateHandler) === "function") {
+          updateHandler(settings);
+      }
+  });
+}
+module.exports = exports = function(){
+  setListener();
+  return $settings;
+};
 
 Object.defineProperty(exports, "settings", {
     get: function() { return settings; },
