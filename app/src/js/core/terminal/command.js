@@ -17,41 +17,41 @@ module.exports = {
     invalidCommand: 0xfe,
     dfuMode: 0xff,
 
-    stringFromCommand: (cmd) => {
+    stringFromCommand: function(cmd) {
         switch (cmd) {
-            case Command.magicByte:
+            case this.magicByte:
                 return "magicByte";
-            case Command.versionNumber:
+            case this.versionNumber:
                 return "versionNumber";
-            case Command.connectionEvent:
+            case this.connectionEvent:
                 return "connectionEvent";
-            case Command.disconnectionEvent:
+            case this.disconnectionEvent:
                 return "disconnectionEvent";
-            case Command.receiveEvent:
+            case this.receiveEvent:
                 return "receiveEvent";
-            case Command.transmitRequest:
+            case this.transmitRequest:
                 return "transmitRequest";
-            case Command.settings:
+            case this.settings:
                 return "settings";
-            case Command.secondaryTerminalId:
+            case this.secondaryTerminalId:
                 return "secondaryTerminalId";
-            case Command.pwmColor:
+            case this.pwmColor:
                 return "pwmColor";
-            case Command.bootDone:
+            case this.bootDone:
                 return "bootDone";
-            case Command.hardwareVersion:
+            case this.hardwareVersion:
                 return "hardwareVersion";
-            case Command.bluetoothAddress:
+            case this.bluetoothAddress:
                 return "bluetoothAddress";
-            case Command.serialNumber:
+            case this.serialNumber:
                 return "serialNumber";
-            case Command.connectionInitiated:
+            case this.connectionInitiated:
                 return "connectionInitiated";
-            case Command.securitySetting:
+            case this.securitySetting:
                 return "securitySetting";
-            case Command.invalidCommand:
+            case this.invalidCommand:
                 return "invalidCommand";
-            case Command.dfuMode:
+            case this.dfuMode:
                 return "dfuMode";
             default:
                 return "unknown";

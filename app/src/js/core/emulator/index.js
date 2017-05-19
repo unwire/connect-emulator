@@ -95,7 +95,7 @@ module.exports = exports = class Base extends EventEmitter {
 
             if (!this._didGetInitialSettings) {
                 this._didGetInitialSettings = true;
-                this.isConnectable = true;
+                settings.isConnectable = true;
             }
 
             settings.mode = (packet[0] & 0x0F);

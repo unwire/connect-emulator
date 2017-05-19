@@ -55,9 +55,9 @@ class Terminal extends EventEmitter {
 
     didReceiveBytes(bytes) {
         this.buffer.push(bytes);
-
         if (!this.currentHeader) {
             this._header = Header.fromBytes(this.buffer.consume(4));
+            console.debug(">", Command.stringFromCommand(this.currentHeader.command), Array.from(bytes));
 
             if (this.currentHeader) {
                 this.didReceiveBytes(new Uint8Array());
@@ -66,6 +66,7 @@ class Terminal extends EventEmitter {
             const packet = this.buffer.consume(this.currentHeader.expectedLength);
 
             if (packet) {
+
                 this.emit(this.currentHeader.command, this.currentHeader, packet);
                 this._header = null;
             }
@@ -127,9 +128,11 @@ class Terminal extends EventEmitter {
     write(bytes) {
         return new Promise((resolve, reject) => {
             chrome.serial.send(this.id, utils.uint8arr2ab(bytes), (info) => {
+                console.debug("<", Command.stringFromCommand(bytes[1]), Array.from(bytes));
                 if (info && info.bytesSent === bytes.length) {
                     resolve(true);
                 } else {
+                    console.debug("<", "sending failed", info);
                     resolve(false);
                 }
             });

@@ -19,6 +19,8 @@ module.exports = exports = class extends Emulator {
     constructor(terminal) {
         super(terminal);
 
+        this._count = 1;
+
         this._inputView  = new InputView();
         this._numpadView = new NumpadView();
 
@@ -50,7 +52,11 @@ module.exports = exports = class extends Emulator {
         this._numpadView.isEnabled = true;
 
         if(this._auto){
-            this._inputView.number(Math.floor((Math.random() * 15) + 190));
+            if(! env.AUTO_COUNTER) {
+              this._inputView.number(Math.floor((Math.random() * 15) + 190));
+            } else {
+              this._inputView.number(this._count++);
+            }
             this._inputView.commit();
         }
     }
@@ -126,9 +132,13 @@ module.exports = exports = class extends Emulator {
 
     onDeviceConnecting(header, packet) {
         const a = packet[0];
-        const b = a === 0 ? 1 : 0;
+        const err = a === 0 ? 1 : 0;
 
-        return this.setColor(1, 1, 0);
+        if (err){
+          return this.setColor(0, 0, 1);
+        } else {
+          return this.setColor(1, 1, 0);
+        }
     }
 
     onDeviceConnected() {
