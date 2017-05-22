@@ -1,6 +1,7 @@
 const $          = require("jquery");
 const Emulator   = require("core/emulator");
 const Command    = require("core/terminal/command");
+const utils      = require("core/utils");
 
 const template = require("./view.pug");
 

@@ -20,7 +20,7 @@ module.exports = exports = class Base extends EventEmitter {
         this._terminal = terminal;
 
         this._terminal.on(Command.connectionInitiated, this.onDeviceConnecting.bind(this));
-        this._terminal.on(Command.connectionEvent, () => this.onDeviceConnected.bind(this));
+        this._terminal.on(Command.connectionEvent, this.onDeviceConnected.bind(this));
         this._terminal.on(Command.disconnectionEvent, this.onDeviceDisconnected.bind(this));
         this._terminal.on(Command.receiveEvent, this.onReceive.bind(this));
         this._terminal.on(Command.transmitRequest, this.onTransmit.bind(this));
