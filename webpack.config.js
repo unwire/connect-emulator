@@ -15,20 +15,15 @@ function getEmulators (srcpath) {
   }
 }
 
-var internalEmulators = getEmulators(path.join(__dirname, "app", "src", "js", "emulators", "internal"));
-var externalEmulators = getEmulators(path.join(__dirname, "app", "src", "js", "emulators", "external"));
-
 var emulatorIndex = "";
-
-for (var i in internalEmulators){
-  emulatorIndex = emulatorIndex.concat(`\n  require("./internal/${internalEmulators[i]}"),`);
+var emulatorScope = ['internal', 'external'];
+for(var i in emulatorScope){
+  var scope = emulatorScope[i];
+  var emulators = getEmulators(path.join(__dirname, "app", "src", "js", "emulators", scope));
+  for (var j in emulators){
+    emulatorIndex = emulatorIndex.concat(`require("./${scope}/${emulators[j]}"),`);
+  }
 }
-
-for (var i in externalEmulators){
-  emulatorIndex = emulatorIndex.concat(`\n  require("./external/${externalEmulators[i]}"),`);
-}
-
-emulatorIndex = emulatorIndex.substring(0, emulatorIndex.length - 1); //remove last comma
 
 fs.writeFileSync(path.join(__dirname, "app", "src", "js", "emulators", "index.js"), `module.exports = exports = [${emulatorIndex}\n];`);
 
