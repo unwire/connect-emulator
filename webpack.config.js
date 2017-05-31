@@ -3,13 +3,47 @@
 const path = require("path");
 const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const fs = require("fs");
+
+function getEmulators (srcpath) {
+  if (fs.existsSync(srcpath)){
+    return fs.readdirSync(srcpath).
+      filter(f => fs.lstatSync(path.join(srcpath, f)).isDirectory()).
+      filter(f => fs.existsSync(path.join(srcpath, f , "index.js")));
+  } else {
+    return [];
+  }
+}
+
+var internalEmulators = getEmulators(path.join(__dirname, "app", "src", "js", "emulators", "internal"));
+var externalEmulators = getEmulators(path.join(__dirname, "app", "src", "js", "emulators", "external"));
+
+var emulatorIndex = "";
+
+for (var i in internalEmulators){
+  emulatorIndex = emulatorIndex.concat(`\n  require("./internal/${internalEmulators[i]}"),`);
+}
+
+for (var i in externalEmulators){
+  emulatorIndex = emulatorIndex.concat(`\n  require("./external/${externalEmulators[i]}"),`);
+}
+
+emulatorIndex = emulatorIndex.substring(0, emulatorIndex.length - 1); //remove last comma
+
+require("fs").writeFileSync(path.join(__dirname, "app", "src", "js", "emulators", "index.js"), `module.exports = exports = [${emulatorIndex}\n];`);
+
+
+
 
 const plugins = [
     new webpack.DefinePlugin({
-        env: JSON.stringify(process.env)
+        __WEBPACK__env: JSON.stringify(process.env)
     }),
     new ExtractTextPlugin("styles.css")
 ];
+
+
+
 
 // Uglify when production
 if (process.env.NODE_ENV !== "development") {
@@ -18,10 +52,6 @@ if (process.env.NODE_ENV !== "development") {
             warnings: false
         }
     }));
-}
-
-if (process.env.NODE_ENV === "external") {
-    require("fs").writeFileSync(path.join(__dirname, "app", "src", "js", "core", "emulators", "index.external.js"), `const Emulator = require("./${process.env.EMULATOR}"); module.exports = {Emulator};`);
 }
 
 module.exports = {
