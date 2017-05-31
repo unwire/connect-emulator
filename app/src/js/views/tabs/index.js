@@ -88,6 +88,11 @@ window.console = {
 
         $log.prepend(`<li class="log-${type}"><pre>${final.join(" ")}</pre></li>`);
 
+        var $logItems = $log.find('li');
+        if ($logItems.length > 200 ){
+          $logItems.last().remove();
+        }
+
         if (!isLogActive) {
             numberOfUnreadLogEntries += 1;
             numberOfUnreadLogEntriesUpdated();
