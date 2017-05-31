@@ -30,7 +30,7 @@ for (var i in externalEmulators){
 
 emulatorIndex = emulatorIndex.substring(0, emulatorIndex.length - 1); //remove last comma
 
-require("fs").writeFileSync(path.join(__dirname, "app", "src", "js", "emulators", "index.js"), `module.exports = exports = [${emulatorIndex}\n];`);
+fs.writeFileSync(path.join(__dirname, "app", "src", "js", "emulators", "index.js"), `module.exports = exports = [${emulatorIndex}\n];`);
 
 
 
