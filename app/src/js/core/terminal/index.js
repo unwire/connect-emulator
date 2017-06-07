@@ -55,6 +55,7 @@ class Terminal extends EventEmitter {
 
     didReceiveBytes(bytes) {
         this.buffer.push(bytes);
+
         if (!this.currentHeader) {
             this._header = Header.fromBytes(this.buffer.consume(4));
             console.debug(">", Command.stringFromCommand(this.currentHeader.command), Array.from(bytes));
@@ -66,7 +67,7 @@ class Terminal extends EventEmitter {
             const packet = this.buffer.consume(this.currentHeader.expectedLength);
 
             if (packet) {
-
+                console.debug(">>", Command.stringFromCommand(this.currentHeader.command), packet);
                 this.emit(this.currentHeader.command, this.currentHeader, packet);
                 this._header = null;
             }
