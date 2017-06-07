@@ -19,6 +19,14 @@ module.exports = exports = class extends Emulator {
         this._el  = template();
         this._$el = $(this._el);
         this.log("Tap terminal to proceed...")
+
+        const $muted = this._$el.find("#muted");
+        $muted.click(() => {
+            this._muted = $muted.is(":checked");
+            console.log("Muted: " + this._muted);
+        });
+
+
     }
 
     /**
@@ -40,8 +48,13 @@ module.exports = exports = class extends Emulator {
     handleState(packet) {
         const bytes = packet.slice(2);
         const msg = utils.ab2str(bytes);
-        this.log(`Echo: ${msg}`);
-        this.log(` - ${bytes} (${bytes.length}b)`);
+        if (this._muted){
+          const $log = this.$el.find(".log");
+          $log.append(".");
+        } else {
+          this.log(`Echo: ${msg}`);
+          this.log(` - ${bytes} (${bytes.length}b)`);
+        }
         this.writeCommand(Command.transmitRequest, 1, bytes);
     }
 
