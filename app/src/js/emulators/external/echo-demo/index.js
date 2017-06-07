@@ -18,6 +18,7 @@ module.exports = exports = class extends Emulator {
 
         this._el  = template();
         this._$el = $(this._el);
+        this.log("Tap terminal to proceed...")
     }
 
     /**
@@ -38,10 +39,8 @@ module.exports = exports = class extends Emulator {
 
     handleState(packet) {
         const bytes = packet.slice(2);
-
-        this.log(`Received: ${utils.ab2str(bytes)}`);
         const msg = utils.ab2str(bytes);
-        this.log(`Sending: ${msg}`);
+        this.log(`Echo (${bytes.length}b): ${msg}`);
         this.writeCommand(Command.transmitRequest, 1, msg);
     }
 
@@ -52,16 +51,17 @@ module.exports = exports = class extends Emulator {
     onDeviceConnecting(header, packet) {
         const a = packet[0];
         const b = a === 0 ? 1 : 0;
-
+        this.log("Device connecting...")
         return this.setColor(1, 1, 0);
     }
 
     onDeviceConnected() {
-
+        this.log("Device connected...")
         return this.setColor(1, 1, 0);
     }
 
     onDeviceDisconnected() {
+        this.log("Device disconnected...")
         return this.setColor(0, 0, 1);
     }
 
