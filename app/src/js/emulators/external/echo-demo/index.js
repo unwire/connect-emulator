@@ -40,7 +40,8 @@ module.exports = exports = class extends Emulator {
     handleState(packet) {
         const bytes = packet.slice(2);
         const msg = utils.ab2str(bytes);
-        this.log(`Echo (${bytes.length}b): ${msg}`);
+        this.log(`Echo: ${msg}`);
+        this.log(` - ${bytes} (${bytes.length}b)`);
         this.writeCommand(Command.transmitRequest, 1, bytes);
     }
 
