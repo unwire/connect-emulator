@@ -44,7 +44,7 @@ class Serial extends EventEmitter {
             var didChange = false;
 
             for(var port of ports) {
-                if (!port.vendorId || (port.path.indexOf("/cu.") === -1 && port.path.indexOf("COM") === -1)) {
+                if (!port.vendorId || port.vendorId != 9304 || (port.path.indexOf("/cu.") === -1 && port.path.indexOf("COM") === -1)) {
                     continue;
                 }
 
