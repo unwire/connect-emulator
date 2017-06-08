@@ -23,7 +23,6 @@ module.exports = exports = class extends Emulator {
         const $muted = this._$el.find("#muted");
         $muted.click(() => {
             this._muted = $muted.is(":checked");
-            console.log("Muted: " + this._muted);
         });
 
 
@@ -53,8 +52,9 @@ module.exports = exports = class extends Emulator {
           $log.append(".");
         } else {
           this.log(`Echo: ${msg}`);
-          this.log(` - ${bytes} (${bytes.length}b)`);
+          this.log(` -    ${bytes} (${bytes.length}b)`);
         }
+
         this.writeCommand(Command.transmitRequest, 1, bytes);
     }
 
