@@ -67,7 +67,7 @@ class Terminal extends EventEmitter {
             const packet = this.buffer.consume(this.currentHeader.expectedLength);
 
             if (packet) {
-                console.debug(">>", Command.stringFromCommand(this.currentHeader.command), packet);
+                console.debug(">>", Command.stringFromCommand(this.currentHeader.command), Array.from(packet));
                 this.emit(this.currentHeader.command, this.currentHeader, packet);
                 this._header = null;
             }
@@ -126,16 +126,37 @@ class Terminal extends EventEmitter {
         }
     }
 
-    write(bytes) {
+    async write(bytes) {
+        if (bytes.length > 1030){
+          console.error("Error: Packet size too big. Sending failed.")
+          return;
+        }
+
+        console.debug("<", Command.stringFromCommand(bytes[1]));
+        var chunkSize = 515
+
+        var buckets = [];
+        var pos = 0;
+        while (pos < bytes.length) {
+          buckets.push(bytes.slice(pos, pos + chunkSize));
+          pos += chunkSize;
+        }
+        for (var i = 0; i < buckets.length; i++){
+          var bucket = buckets[i];
+          await this.writePart(bucket);
+        }
+    }
+
+    writePart(bytes) {
         return new Promise((resolve, reject) => {
             chrome.serial.send(this.id, utils.uint8arr2ab(bytes), (info) => {
-                console.debug("<", Command.stringFromCommand(bytes[1]), Array.from(bytes));
-                if (info && info.bytesSent === bytes.length) {
-                    resolve(true);
-                } else {
-                    console.debug("<", "sending failed", info);
-                    resolve(false);
-                }
+                  console.debug("<<", Array.from(bytes));
+                  if (info && info.bytesSent === bytes.length) {
+                      resolve(true);
+                  } else {
+                      console.debug("<", "sending failed", info);
+                      resolve(false);
+                  }
             });
         });
     }
