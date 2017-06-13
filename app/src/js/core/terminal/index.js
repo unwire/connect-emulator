@@ -6,6 +6,11 @@ const Command = require("./command");
 const Buffer  = require("./buffer");
 const Header  = require("./header");
 
+var ReadWriteLock = require('rwlock');
+var lock = new ReadWriteLock();
+
+
+
 class Terminal extends EventEmitter {
 
     constructor(path, emulator) {
@@ -128,23 +133,40 @@ class Terminal extends EventEmitter {
 
     async write(bytes) {
         if (bytes.length > 1030){
-          console.error("Error: Packet size too big. Sending failed.")
-          return;
+            console.error("Error: Packet size too big. Sending failed.")
+            return;
         }
+        lock.writeLock(async (release) => {
+            console.debug("<", Command.stringFromCommand(bytes[1]));
+            const chunkSize = 1024;
 
-        console.debug("<", Command.stringFromCommand(bytes[1]));
-        var chunkSize = 515
+            var buckets = [];
+            var pos = 0;
+            while (pos < bytes.length) {
+              buckets.push(bytes.slice(pos, pos + chunkSize));
+              pos += chunkSize;
+            }
+            for (var i = 0; i < buckets.length; i++){
+              var bucket = buckets[i];
+              await this.writePart(bucket);
+            }
 
-        var buckets = [];
-        var pos = 0;
-        while (pos < bytes.length) {
-          buckets.push(bytes.slice(pos, pos + chunkSize));
-          pos += chunkSize;
-        }
-        for (var i = 0; i < buckets.length; i++){
-          var bucket = buckets[i];
-          await this.writePart(bucket);
-        }
+            var timeoutMs = bytes.length * 6;
+            if(timeoutMs < 1000)
+              timeoutMs = 1000;
+
+            var timer = setTimeout(function () {
+              console.log(`Error: No response from dongle within timeout(${timeoutMs})`)
+              release();
+            }, timeoutMs);
+
+            this.once(bytes[1], (header, packet) => {
+              release();
+              clearTimeout(timer);
+            });
+
+
+        });
     }
 
     writePart(bytes) {
