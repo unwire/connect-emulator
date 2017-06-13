@@ -104,7 +104,6 @@ window.console = {
     warn: (...args) => { console.__logIt("warn", args); origConsole.warn.apply(origConsole, args); },
     debug: (...args) => {
       if(env.NODE_ENV != "production"){
-        console.__logIt("debug", args);
         origConsole.debug.apply(origConsole, args);
       }
     },
