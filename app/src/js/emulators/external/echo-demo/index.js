@@ -46,15 +46,11 @@ module.exports = exports = class extends Emulator {
 
     handleState(packet) {
         const bytes = packet.slice(2);
-        const msg = utils.ab2str(bytes);
-        if (this._muted){
-          const $log = this.$el.find(".log");
-          $log.append(".");
-        } else {
+        var msg = utils.ab2str(bytes);
+        if (!this._muted){
           this.log(`Echo: ${msg}`);
           this.log(` -    ${bytes} (${bytes.length}b)`);
         }
-
         this.writeCommand(Command.transmitRequest, 1, bytes);
     }
 
