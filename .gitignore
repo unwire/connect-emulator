@@ -83,3 +83,5 @@ typings/
 # dotenv environment variables file
 .env
 *.crx
+*.zip
+package-lock.json
