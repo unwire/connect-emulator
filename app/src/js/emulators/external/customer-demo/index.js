@@ -86,7 +86,7 @@ module.exports = exports = class extends Emulator {
                     this.writeCommand(
                         Command.transmitRequest,
                         State.waitingForAcknowledgement,
-                        `${this._amount}|CAD|18`
+                        `${this._amount}|SEK|18`
                     );
                 };
 
