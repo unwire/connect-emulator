@@ -5,7 +5,9 @@ const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const GitRevisionPlugin = require('git-revision-webpack-plugin');
 
-var gitRevisionPlugin = new GitRevisionPlugin()
+var gitRevisionPlugin = new GitRevisionPlugin({
+    lightweightTags: true
+})
 
 const plugins = [
     new webpack.DefinePlugin({
