@@ -85,3 +85,6 @@ typings/
 *.crx
 *.zip
 package-lock.json
+
+# intellij
+.idea
