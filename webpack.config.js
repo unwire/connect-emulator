@@ -3,12 +3,16 @@
 const path = require("path");
 const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const GitRevisionPlugin = require('git-revision-webpack-plugin');
+
+var gitRevisionPlugin = new GitRevisionPlugin()
 
 const plugins = [
     new webpack.DefinePlugin({
-        env: JSON.stringify(process.env)
+        env: JSON.stringify(process.env),
+        __VERSION__: JSON.stringify(gitRevisionPlugin.version())
     }),
-    new ExtractTextPlugin("styles.css")
+    new ExtractTextPlugin("styles.css"),
 ];
 
 // Uglify when production
