@@ -103,7 +103,7 @@ window.console = {
     error: (...args) => { console.__logIt("error", args); origConsole.error.apply(origConsole, args); },
     warn: (...args) => { console.__logIt("warn", args); origConsole.warn.apply(origConsole, args); },
     debug: (...args) => {
-      if(__WEBPACK__env.NODE_ENV != "production"){
+      if(__WEBPACK__ENV__.NODE_ENV != "production"){
         origConsole.debug.apply(origConsole, args);
       }
     },

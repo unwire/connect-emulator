@@ -34,8 +34,8 @@ var gitRevisionPlugin = new GitRevisionPlugin({
 
 const plugins = [
     new webpack.DefinePlugin({
-        __WEBPACK__env: JSON.stringify(process.env),
-        __VERSION__: JSON.stringify(gitRevisionPlugin.version())
+        __WEBPACK__ENV__: JSON.stringify(process.env),
+        __WEBPACK__VERSION__: JSON.stringify(gitRevisionPlugin.version())
     }),
     new ExtractTextPlugin("styles.css"),
 ];

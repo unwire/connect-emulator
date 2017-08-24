@@ -52,7 +52,7 @@ module.exports = exports = class extends Emulator {
         this._numpadView.isEnabled = true;
 
         if(this._auto){
-            if(! __WEBPACK__env.AUTO_COUNTER) {
+            if(! __WEBPACK__ENV__.AUTO_COUNTER) {
               this._inputView.number(Math.floor((Math.random() * 15) + 190));
             } else {
               this._inputView.number(this._count++);
