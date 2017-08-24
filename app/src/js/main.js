@@ -7,6 +7,6 @@ $(document).ready(() => {
 
     require("views").forEach(element => $body.append(element));
 
-    $body.find(".emulatorVersion").html(`v${__VERSION__}`);
+    $body.find(".emulatorVersion").html(`${__VERSION__}`);
     console.log("Ready.");
 });
