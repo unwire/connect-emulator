@@ -88,6 +88,11 @@ window.console = {
 
         $log.prepend(`<li class="log-${type}"><pre>${final.join(" ")}</pre></li>`);
 
+        var $logItems = $log.find('li');
+        if ($logItems.length > 200 ){
+          $logItems.last().remove();
+        }
+
         if (!isLogActive) {
             numberOfUnreadLogEntries += 1;
             numberOfUnreadLogEntriesUpdated();
@@ -99,7 +104,6 @@ window.console = {
     warn: (...args) => { console.__logIt("warn", args); origConsole.warn.apply(origConsole, args); },
     debug: (...args) => {
       if(__WEBPACK__env.NODE_ENV != "production"){
-        console.__logIt("debug", args);
         origConsole.debug.apply(origConsole, args);
       }
     },

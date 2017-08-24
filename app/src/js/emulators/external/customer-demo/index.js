@@ -86,7 +86,7 @@ module.exports = exports = class extends Emulator {
                     this.writeCommand(
                         Command.transmitRequest,
                         State.waitingForAcknowledgement,
-                        `${this._amount}|CAD|18`
+                        `${this._amount}|SEK|18`
                     );
                 };
 
@@ -132,7 +132,7 @@ module.exports = exports = class extends Emulator {
 
     onDeviceConnecting(header, packet) {
         const a = packet[0];
-        const err = a === 0 ? 1 : 0;
+        const err = a === 1 ? 1 : 0;
 
         if (err){
           return this.setColor(0, 0, 1);

@@ -4,6 +4,7 @@ const path = require("path");
 const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const fs = require("fs");
+const GitRevisionPlugin = require('git-revision-webpack-plugin');
 
 function getEmulators (srcpath) {
   if (fs.existsSync(srcpath)){
@@ -27,14 +28,16 @@ for(var i in emulatorScope){
 
 fs.writeFileSync(path.join(__dirname, "app", "src", "js", "emulators", "index.js"), `module.exports = exports = [${emulatorIndex}\n];`);
 
-
-
+var gitRevisionPlugin = new GitRevisionPlugin({
+    lightweightTags: true
+})
 
 const plugins = [
     new webpack.DefinePlugin({
-        __WEBPACK__env: JSON.stringify(process.env)
+        __WEBPACK__env: JSON.stringify(process.env),
+        __VERSION__: JSON.stringify(gitRevisionPlugin.version())
     }),
-    new ExtractTextPlugin("styles.css")
+    new ExtractTextPlugin("styles.css"),
 ];
 
 

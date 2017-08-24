@@ -6,6 +6,11 @@ const Command = require("./command");
 const Buffer  = require("./buffer");
 const Header  = require("./header");
 
+var ReadWriteLock = require('rwlock');
+var lock = new ReadWriteLock();
+
+
+
 class Terminal extends EventEmitter {
 
     constructor(path, emulator) {
@@ -55,6 +60,7 @@ class Terminal extends EventEmitter {
 
     didReceiveBytes(bytes) {
         this.buffer.push(bytes);
+
         if (!this.currentHeader) {
             this._header = Header.fromBytes(this.buffer.consume(4));
             console.debug(">", Command.stringFromCommand(this.currentHeader.command), Array.from(bytes));
@@ -66,7 +72,7 @@ class Terminal extends EventEmitter {
             const packet = this.buffer.consume(this.currentHeader.expectedLength);
 
             if (packet) {
-
+                console.debug(">>", Command.stringFromCommand(this.currentHeader.command), Array.from(packet));
                 this.emit(this.currentHeader.command, this.currentHeader, packet);
                 this._header = null;
             }
@@ -125,16 +131,54 @@ class Terminal extends EventEmitter {
         }
     }
 
-    write(bytes) {
+    async write(bytes) {
+        if (bytes.length > 1030){
+            console.error("Error: Packet size too big. Sending failed.")
+            return;
+        }
+        lock.writeLock(async (release) => {
+            console.debug("<", Command.stringFromCommand(bytes[1]));
+            const chunkSize = 1024;
+
+            var buckets = [];
+            var pos = 0;
+            while (pos < bytes.length) {
+              buckets.push(bytes.slice(pos, pos + chunkSize));
+              pos += chunkSize;
+            }
+            for (var i = 0; i < buckets.length; i++){
+              var bucket = buckets[i];
+              await this.writePart(bucket);
+            }
+
+            var timeoutMs = bytes.length * 6;
+            if(timeoutMs < 1000)
+              timeoutMs = 1000;
+
+            var timer = setTimeout(function () {
+              console.log(`Error: No response from dongle within timeout(${timeoutMs})`)
+              release();
+            }, timeoutMs);
+
+            this.once(bytes[1], (header, packet) => {
+              release();
+              clearTimeout(timer);
+            });
+
+
+        });
+    }
+
+    writePart(bytes) {
         return new Promise((resolve, reject) => {
             chrome.serial.send(this.id, utils.uint8arr2ab(bytes), (info) => {
-                console.debug("<", Command.stringFromCommand(bytes[1]), Array.from(bytes));
-                if (info && info.bytesSent === bytes.length) {
-                    resolve(true);
-                } else {
-                    console.debug("<", "sending failed", info);
-                    resolve(false);
-                }
+                  console.debug("<<", Array.from(bytes));
+                  if (info && info.bytesSent === bytes.length) {
+                      resolve(true);
+                  } else {
+                      console.debug("<", "sending failed", info);
+                      resolve(false);
+                  }
             });
         });
     }
