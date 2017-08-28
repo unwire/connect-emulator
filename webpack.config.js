@@ -3,7 +3,30 @@
 const path = require("path");
 const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const fs = require("fs");
 const GitRevisionPlugin = require('git-revision-webpack-plugin');
+
+function getEmulators (srcpath) {
+  if (fs.existsSync(srcpath)){
+    return fs.readdirSync(srcpath).
+      filter(f => fs.lstatSync(path.join(srcpath, f)).isDirectory()).
+      filter(f => fs.existsSync(path.join(srcpath, f , "index.js")));
+  } else {
+    return [];
+  }
+}
+
+var emulatorIndex = "";
+var emulatorScope = ['internal', 'external'];
+for(var i in emulatorScope){
+  var scope = emulatorScope[i];
+  var emulators = getEmulators(path.join(__dirname, "app", "src", "js", "emulators", scope));
+  for (var j in emulators){
+    emulatorIndex = emulatorIndex.concat(`require("./${scope}/${emulators[j]}"),`);
+  }
+}
+
+fs.writeFileSync(path.join(__dirname, "app", "src", "js", "emulators", "index.js"), `module.exports = exports = [${emulatorIndex}\n];`);
 
 var gitRevisionPlugin = new GitRevisionPlugin({
     lightweightTags: true
@@ -11,11 +34,14 @@ var gitRevisionPlugin = new GitRevisionPlugin({
 
 const plugins = [
     new webpack.DefinePlugin({
-        env: JSON.stringify(process.env),
-        __VERSION__: JSON.stringify(gitRevisionPlugin.version())
+        __WEBPACK__ENV__: JSON.stringify(process.env),
+        __WEBPACK__VERSION__: JSON.stringify(gitRevisionPlugin.version())
     }),
     new ExtractTextPlugin("styles.css"),
 ];
+
+
+
 
 // Uglify when production
 if (process.env.NODE_ENV !== "development") {
@@ -24,10 +50,6 @@ if (process.env.NODE_ENV !== "development") {
             warnings: false
         }
     }));
-}
-
-if (process.env.NODE_ENV === "external") {
-    require("fs").writeFileSync(path.join(__dirname, "app", "src", "js", "core", "emulators", "index.external.js"), `const Emulator = require("./${process.env.EMULATOR}"); module.exports = {Emulator};`);
 }
 
 module.exports = {

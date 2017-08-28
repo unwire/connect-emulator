@@ -60,11 +60,20 @@ $button.click(async () => {
 /**
  * Populate emulator tab
  */
-for(var i = 0; i < emulators.length; i++) {
-    $emulators.append(`<option value="${i}">${emulators[i].name}</option>`);
+
+const sortedEmulators = emulators.sort(function(a, b) {
+   var nameA = a.name.toUpperCase();
+   var nameB = b.name.toUpperCase();
+   if (nameA < nameB) { return -1;}
+   if (nameA > nameB) { return 1;}
+   return 0;
+ });
+
+for(var i = 0; i < sortedEmulators.length; i++) {
+    $emulators.append(`<option value="${i}">${sortedEmulators[i].name}</option>`);
 }
 
-if (emulators.length==1){
+if (sortedEmulators.length==1){
     $emulators.hide();
 }
 
