@@ -7,7 +7,7 @@
     "dev": "webpack --watch",
     "devbuild": "webpack",
     "build": "NODE_ENV=production webpack",
-    "crx": "npm run build; crx pack ./app -p app.pem -o unwire-connect-emulator.crx"
+    "crx": "npm run build; crx pack ./app -p app.pem -o unwire-connect-emulator-`git describe --tags`.crx"
   },
   "keywords": [
     "unwire",
