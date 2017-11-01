@@ -120,10 +120,18 @@ class Terminal extends EventEmitter {
             });
         });
     }
-
     async disconnect() {
         try {
-            await this._emulator.onSerialDisconnect();
+            await new Promise((resolve) => {
+                const self = this;
+                self._emulator.onSerialDisconnect();
+                setTimeout(function(){ // #NASTYHACK
+                    resolve();
+                }, 25);
+            });
+
+            await this._emulator.writeCommand(Command.disconnectionEvent);
+
             await this.flush();
         }
         catch (e) {
@@ -143,28 +151,31 @@ class Terminal extends EventEmitter {
             var buckets = [];
             var pos = 0;
             while (pos < bytes.length) {
-              buckets.push(bytes.slice(pos, pos + chunkSize));
-              pos += chunkSize;
+                buckets.push(bytes.slice(pos, pos + chunkSize));
+                pos += chunkSize;
             }
-            for (var i = 0; i < buckets.length; i++){
-              var bucket = buckets[i];
-              await this.writePart(bucket);
+            for (var i = 0; i < buckets.length; i++) {
+                var bucket = buckets[i];
+                await this.writePart(bucket);
             }
 
-            var timeoutMs = bytes.length * 6;
-            if(timeoutMs < 1000)
-              timeoutMs = 1000;
+            if (bytes[1] != Command.disconnectionEvent) {
+                var timeoutMs = bytes.length * 6;
+                if (timeoutMs < 1000)
+                    timeoutMs = 1000;
 
-            var timer = setTimeout(function () {
-              console.log(`Error: No response from dongle within timeout(${timeoutMs})`)
-              release();
-            }, timeoutMs);
+                var timer = setTimeout(function () {
+                    console.log(`Error: No response from dongle within timeout(${timeoutMs})`)
+                    release();
+                }, timeoutMs);
 
-            this.once(bytes[1], (header, packet) => {
-              release();
-              clearTimeout(timer);
-            });
-
+                this.once(bytes[1], (header, packet) => {
+                    release();
+                    clearTimeout(timer);
+                });
+            } else {
+                release();
+            }
 
         });
     }

@@ -29,7 +29,10 @@ module.exports = exports = class Base extends EventEmitter {
             this._terminal.on(cmd, (header, packet) => this.handleSettingsReceived(cmd, packet));
         });
 
-        this._terminal.on("serialConnected", (data) => this.writeCommand(Command.versionNumber));
+        this._terminal.on("serialConnected", (data) => {
+            this.setColor(0, 0, 1);
+            this.writeCommand(Command.versionNumber)
+        });
     }
 
     /**
@@ -184,7 +187,9 @@ module.exports = exports = class Base extends EventEmitter {
 
     onTransmit(header, packet) { }
 
-    onSerialDisconnect() { return this.writeCommand(0x04, 0x04, "failure"); }
+    onSerialDisconnect() {
+        return this.setColor(0, 0, 0);
+    }
 
     /**
      * Properties
