@@ -23,6 +23,10 @@ exports.uint8arr2ab = function(arr) {
     return buf;
 }
 
+exports.uint162uint8arr = function(value) {
+    return new Uint8Array([value & 0xff, (value >> 8)]);
+}
+
 exports.uint8arr2str = function(arr) {
     return new TextDecoder("utf-8").decode(arr);
 }
